@@ -293,6 +293,13 @@ Widget buildTripCard(
   final truckNo = bookingData['truckNo'];
   final loadingPoint = bookingData['loadingPointCity'];
   final unloadingPoint = bookingData['unloadingPointCity'];
+  final lr = bookingData['lr'];
+  final remark = bookingData['remarks'];
+  final damage = bookingData['damage'];
+  final freight = bookingData['rate'];
+  print(lr);
+  print(remark);
+  print(damage);
 
   return SizedBox(
     height: 50,
@@ -322,7 +329,7 @@ Widget buildTripCard(
           flex: 2,
           child: Center(
             child: Text(
-              "",
+              lr ?? '',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.black,
@@ -376,38 +383,32 @@ Widget buildTripCard(
         ),
         Expanded(
           flex: 3,
-          child: Center(
-            child: Text(
-              '',
-              textAlign: TextAlign.center,
-              overflow: TextOverflow.ellipsis,
-              softWrap: false,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: black,
-                fontSize: textFontSize,
-                fontFamily: 'Montserrat',
-              ),
-            ),
-          ),
-        ),
-        const VerticalDivider(
-          color: greyShade,
-          thickness: 1,
-          width: 0,
-        ),
-        Expanded(
-          flex: 3,
-          child: Center(
-            child: Text(
-              '',
-              textAlign: TextAlign.center,
-              style: TextStyle(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              freight != null
+                  ? Text(
+                      "₹",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: textFontSize,
+                          color: black,
+                          fontFamily: 'Montserrat'),
+                    )
+                  : Container(),
+              Text(
+                freight != null ? freight.toString() : '',
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+                softWrap: false,
+                style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: textFontSize,
                   color: black,
-                  fontFamily: 'Montserrat'),
-            ),
+                  fontSize: textFontSize,
+                  fontFamily: 'Montserrat',
+                ),
+              ),
+            ],
           ),
         ),
         const VerticalDivider(
@@ -417,19 +418,61 @@ Widget buildTripCard(
         ),
         Expanded(
           flex: 3,
-          child: Center(
-            child: Text(
-              '',
-              textAlign: TextAlign.center,
-              overflow: TextOverflow.ellipsis,
-              softWrap: false,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: black,
-                fontSize: textFontSize,
-                fontFamily: 'Montserrat',
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              damage != null
+                  ? Text(
+                      "₹",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: textFontSize,
+                          color: black,
+                          fontFamily: 'Montserrat'),
+                    )
+                  : Container(),
+              Text(
+                damage != null ? damage.toString() : '',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: textFontSize,
+                    color: black,
+                    fontFamily: 'Montserrat'),
               ),
-            ),
+            ],
+          ),
+        ),
+        const VerticalDivider(
+          color: greyShade,
+          thickness: 1,
+          width: 0,
+        ),
+        Expanded(
+          flex: 3,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "₹",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: textFontSize,
+                    color: black,
+                    fontFamily: 'Montserrat'),
+              ),
+              Text(
+                '${damage ?? 0 - (freight ?? 0.0)}',
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+                softWrap: false,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: black,
+                  fontFamily: 'Montserrat',
+                ),
+              ),
+            ],
           ),
         ),
         const VerticalDivider(
@@ -478,11 +521,11 @@ Widget buildTripCard(
           thickness: 1,
           width: 0,
         ),
-        const Expanded(
+        Expanded(
           flex: 3,
           child: Center(
             child: Text(
-              '',
+              remark ?? '',
               textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
               softWrap: false,

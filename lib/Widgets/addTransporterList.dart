@@ -569,7 +569,7 @@ class _AddTransporterListState extends State<AddTransporterList> {
                     child: Align(
                       alignment: Alignment.center,
                       child: SizedBox(
-                          width: 200,
+                          width: 230,
                           height: 60,
                           child: ElevatedButton(
                               onPressed: () {

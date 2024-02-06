@@ -350,6 +350,7 @@ class _TransporterScreenState extends State<TransporterScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: Center(
                     child: PopupMenuButton<PopUpMenuForTransporter>(
+                      surfaceTintColor: Colors.transparent,
                       offset: Offset(0, space_2),
                       shape: RoundedRectangleBorder(
                         borderRadius:
@@ -438,31 +439,28 @@ class _TransporterScreenState extends State<TransporterScreen> {
           PopUpMenuForTransporter item) =>
       PopupMenuItem<PopUpMenuForTransporter>(
         value: item,
-        child: Container(
-          color: white,
-          child: Column(
-            children: [
-              // Display each item with an icon and text
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Icon(
-                      item.icon,
-                      color: item.color,
-                    ),
+        child: Column(
+          children: [
+            // Display each item with an icon and text
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Icon(
+                    item.icon,
+                    color: item.color,
                   ),
-                  Text(
-                    item.text,
-                    style: TextStyle(
-                      fontWeight: mediumBoldWeight,
-                      color: item.color,
-                    ),
+                ),
+                Text(
+                  item.text,
+                  style: TextStyle(
+                    fontWeight: mediumBoldWeight,
+                    color: item.color,
                   ),
-                ],
-              ),
-            ],
-          ),
+                ),
+              ],
+            ),
+          ],
         ),
       );
 }
