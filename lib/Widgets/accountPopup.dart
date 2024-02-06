@@ -31,6 +31,7 @@ class _AccountMenuButtonState extends State<AccountMenuButton> {
       onPressed: () {
         // This is where you show the popup menu
         showMenu(
+          surfaceTintColor: Colors.transparent,
           context: context,
           position: const RelativeRect.fromLTRB(
               100.0, 50, 10, 100.0), // Adjust the position as needed
@@ -72,7 +73,6 @@ class _AccountMenuButtonState extends State<AccountMenuButton> {
                     fontSize: 18,
                   ),
                 ),
-                horizontalTitleGap: 0.0,
                 onTap: () {
                   widget.updateIndex(widget.screens
                       .indexOf(widget.accountVerificationStatusScreen));
@@ -91,7 +91,6 @@ class _AccountMenuButtonState extends State<AccountMenuButton> {
                     fontSize: 18,
                   ),
                 ),
-                horizontalTitleGap: 0.0,
                 onTap: () {
                   // Handle Help action
                   Navigator.of(context).pop();
@@ -109,7 +108,6 @@ class _AccountMenuButtonState extends State<AccountMenuButton> {
                     fontSize: 18,
                   ),
                 ),
-                horizontalTitleGap: 0.0,
                 onTap: () async {
                   // Handle logout
                   Navigator.of(context).pop();
