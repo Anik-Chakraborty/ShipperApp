@@ -353,6 +353,7 @@ class _FacilitiesState extends State<Facilities> {
             flex: 2,
             child: Center(
               child: PopupMenuButton<PopUpMenuForFacility>(
+                surfaceTintColor: Colors.transparent,
                 offset: Offset(0, space_2),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(radius_2)),
@@ -428,19 +429,16 @@ class _FacilitiesState extends State<Facilities> {
   PopupMenuItem<PopUpMenuForFacility> showEachItem(PopUpMenuForFacility item) =>
       PopupMenuItem<PopUpMenuForFacility>(
         value: item,
-        child: Container(
-          color: white,
-          child: Column(
-            children: [
-              Text(
-                item.text,
-                style: TextStyle(
-                  fontWeight: mediumBoldWeight,
-                  color: item.color,
-                ),
+        child: Column(
+          children: [
+            Text(
+              item.text,
+              style: TextStyle(
+                fontWeight: mediumBoldWeight,
+                color: item.color,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       );
 }
