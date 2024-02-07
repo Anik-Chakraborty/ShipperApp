@@ -297,9 +297,6 @@ Widget buildTripCard(
   final remark = bookingData['remarks'];
   final damage = bookingData['damage'];
   final freight = bookingData['rate'];
-  print(lr);
-  print(remark);
-  print(damage);
 
   return SizedBox(
     height: 50,
@@ -462,7 +459,7 @@ Widget buildTripCard(
                     fontFamily: 'Montserrat'),
               ),
               Text(
-                '${damage ?? 0 - (freight ?? 0.0)}',
+                '${((freight ?? 0.0) - (damage ?? 0)).toInt()}',
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.ellipsis,
                 softWrap: false,
