@@ -58,26 +58,7 @@ class _EmployeeListRolesScreenState extends State<EmployeeListRolesScreen> {
       body: SafeArea(
         child: loading
             ? const OnGoingLoadingWidgets()
-            : users.isEmpty
-                ? Container(
-                    margin: const EdgeInsets.only(top: 153),
-                    child: Column(
-                      children: [
-                        const Image(
-                          image: AssetImage('assets/images/EmptyLoad.png'),
-                          height: 127,
-                          width: 127,
-                        ),
-                        Text(
-                          'noLoadAdded'.tr,
-                          // 'Looks like you have not added any Loads!',
-                          style: TextStyle(fontSize: size_8, color: grey),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  )
-                : RefreshIndicator(
+            : RefreshIndicator(
                     color: lightNavyBlue,
                     onRefresh: () {
                       setState(() {
@@ -142,6 +123,26 @@ class _EmployeeListRolesScreenState extends State<EmployeeListRolesScreen> {
                             visible:
                                 Responsive.isMobile(context) ? false : true,
                           ),
+                          users.isEmpty
+                              ? Expanded(
+                            child: Center(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(
+                                    Icons.groups,
+                                    color: unselectedGrey,
+                                    size: 80,
+                                  ),
+                                  Text(
+                                    'Team is empty',
+                                    style: TextStyle(fontSize: size_8, color: grey),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                            )
+                          ):
                           Expanded(
                             child: ListView.builder(
                               shrinkWrap: true,
@@ -182,12 +183,16 @@ class _EmployeeListRolesScreenState extends State<EmployeeListRolesScreen> {
       if (doc.exists) {
         Map data = doc.data() as Map;
         shipperIdController.updateCompanyName(data["company_details"]["company_name"]);
-        List members = data!["members"];
-        members.forEach((value) {
-          users.add(CompanyUsers(
-            uid: value,
-          ));
-        });
+        List members = data["members"] ?? [];
+
+        if(members.isNotEmpty){
+          members.forEach((value) {
+            users.add(CompanyUsers(
+              uid: value,
+            ));
+          });
+        }
+
         setState(() {
           loading = false;
         });
