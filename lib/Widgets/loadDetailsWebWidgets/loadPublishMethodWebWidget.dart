@@ -2,11 +2,11 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:shipper_app/constants/colors.dart';
 import 'package:shipper_app/constants/fontSize.dart';
+import 'package:shipper_app/controller/addLocationDrawerToggleController.dart';
 import 'package:shipper_app/providerClass/providerData.dart';
 
 import '../../Web/screens/PublishMethodBidWebScreen.dart';
@@ -30,6 +30,9 @@ class _LoadPublishMethodWebWidgetState
     'assets/images/load_publish_select.png'
   ];
 
+  AddLocationDrawerToggleController addLocationDrawerToggleController =
+      Get.put(AddLocationDrawerToggleController());
+
   @override
   Widget build(BuildContext context) {
     ProviderData providerData = Provider.of<ProviderData>(context);
@@ -38,18 +41,20 @@ class _LoadPublishMethodWebWidgetState
         onChanged: (value) {
           if (value == publishMethods[0] || value == publishMethods[2]) {
             showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    surfaceTintColor: Colors.white,
-                      backgroundColor: Colors.white,
-                      content: Container(
-                          width: MediaQuery.of(context).size.width * 0.7,
-                          height: MediaQuery.of(context).size.width * 0.8,
-                          child: PublishMethodBidWebScreen(
-                            publishMethod: value,
-                          )));
-                });
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                          surfaceTintColor: Colors.white,
+                          backgroundColor: Colors.white,
+                          content: Container(
+                              width: MediaQuery.of(context).size.width * 0.7,
+                              height: MediaQuery.of(context).size.width * 0.8,
+                              child: PublishMethodBidWebScreen(
+                                publishMethod: value,
+                              )));
+                    })
+                .then((value) => addLocationDrawerToggleController
+                    .toggleAddTransporter(false));
           } else if (value == publishMethods[1]) {
             providerData.updatePublishMethod(value);
             setState(() {});

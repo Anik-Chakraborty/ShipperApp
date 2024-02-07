@@ -1,11 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shipper_app/responsive.dart';
 import '/constants/colors.dart';
 import '/constants/spaces.dart';
 import '/constants/radius.dart';
-import '/constants/fontSize.dart';
 import '/constants/borderWidth.dart';
 import '/constants/elevation.dart';
 
@@ -36,6 +34,7 @@ class SignUpWithGoogleButton extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius_10),),
               shadowColor: lightGrey,
+              surfaceTintColor: Colors.transparent,
               elevation: elevation_1,
               backgroundColor: white),
           onPressed: onPressed,

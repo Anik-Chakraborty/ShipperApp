@@ -9,7 +9,6 @@ import 'package:shipper_app/Web/screens/home_web.dart';
 import 'package:shipper_app/Widgets/PublishMethodBidSearchTextFieldWidget.dart';
 import 'package:shipper_app/Widgets/addTransporterWidget.dart';
 import 'package:shipper_app/Widgets/loadDetailsWebWidgets/BiddingDateTime.dart';
-import 'package:shipper_app/Widgets/postLoadLocationWidgets/PostLoadMultipleLocationWidget.dart';
 import 'package:shipper_app/constants/colors.dart';
 import 'package:shipper_app/constants/fontSize.dart';
 import 'package:shipper_app/constants/fontWeights.dart';
@@ -19,9 +18,7 @@ import 'package:shipper_app/functions/shipperApis/TransporterListFromShipperApi.
 import 'package:shipper_app/providerClass/providerData.dart';
 import 'package:shipper_app/responsive.dart';
 import 'package:shipper_app/screens/PostLoadScreens/PostLoadScreenLoadDetails.dart';
-
 import 'package:shipper_app/constants/spaces.dart';
-import 'package:shipper_app/screens/PostLoadScreens/postloadnavigation.dart';
 
 class PublishMethodBidWebScreen extends StatefulWidget {
   final publishMethod;
@@ -125,6 +122,7 @@ class _PublishMethodBidWebScreenState extends State<PublishMethodBidWebScreen> {
                   Expanded(child: Container()),
                   IconButton(
                       onPressed: () {
+                        addLocationDrawerToggleController.toggleAddTransporter(false);
                         Navigator.pop(context);
                       },
                       icon: FaIcon(
