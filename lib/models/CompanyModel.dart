@@ -73,7 +73,7 @@ class CompanyModel{
     }
 
     if(transporters!=null){
-      companyDoc['members'] = transporters;
+      companyDoc['transporters'] = transporters;
     }
 
     return companyDoc;
