@@ -352,7 +352,7 @@ class _EwayBillsState extends State<EwayBills> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Image.asset('assets/icons/Track.png'),
+                            Image.asset('assets/icons/track.png'),
                             Text('Track All Loads',
                                 style: GoogleFonts.montserrat(
                                     fontSize: screenWidth * 0.0125,

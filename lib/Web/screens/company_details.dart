@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shipper_app/Web/screens/home_web.dart';
+import 'package:shipper_app/Widgets/alertDialog/loadingAlertDialog.dart';
 import 'package:shipper_app/Widgets/buttons/ConfirmButton.dart';
 import 'package:shipper_app/Widgets/showSnackBarTop.dart';
 import 'package:shipper_app/Widgets/webHeader.dart';
@@ -208,7 +209,7 @@ class _CompanyDetailsState extends State<CompanyDetails> {
                                 padding:
                                 EdgeInsets.only(left : 10,top: 10),
                                 child: Text(
-                                  'Company Phone No',
+                                  'Company Phone No (optional)',
                                   style: GoogleFonts.montserrat(
                                     fontSize: 16,
                                     color: black,
@@ -377,7 +378,7 @@ class _CompanyDetailsState extends State<CompanyDetails> {
                               padding:
                               EdgeInsets.only(left : 10),
                               child: Text(
-                                'Company Address',
+                                'Company Address (optional)',
                                 style: GoogleFonts.montserrat(
                                   fontSize: 16,
                                   color: black,
@@ -394,14 +395,6 @@ class _CompanyDetailsState extends State<CompanyDetails> {
                               margin: const EdgeInsets.all(10),
                               child: TextFormField(
                                 controller: companyAddressController,
-                                validator: (value) {
-                                  //address is mandatory
-                                  if (value != null && value.isNotEmpty) {
-                                    return null;
-                                  } else {
-                                    return 'Enter Company Address';
-                                  }
-                                },
                                 autofocus: true,
                                 decoration: InputDecoration(
                                   fillColor: offWhite,
@@ -439,7 +432,7 @@ class _CompanyDetailsState extends State<CompanyDetails> {
                                 padding:
                                 EdgeInsets.only(left : 10,top: 10),
                                 child: Text(
-                                  'City',
+                                  'City (optional)',
                                   style: GoogleFonts.montserrat(
                                     fontSize: 16,
                                     color: black,
@@ -453,7 +446,7 @@ class _CompanyDetailsState extends State<CompanyDetails> {
                                 padding:
                                 EdgeInsets.only(left : 10,top: 10),
                                 child: Text(
-                                  'State',
+                                  'State (optional)',
                                   style: GoogleFonts.montserrat(
                                     fontSize: 16,
                                     color: black,
@@ -467,7 +460,7 @@ class _CompanyDetailsState extends State<CompanyDetails> {
                                 padding:
                                 EdgeInsets.only(left : 10,top: 10),
                                 child: Text(
-                                  'PinCode',
+                                  'PinCode (optional)',
                                   style: GoogleFonts.montserrat(
                                     fontSize: 16,
                                     color: black,
@@ -488,14 +481,6 @@ class _CompanyDetailsState extends State<CompanyDetails> {
                                 margin: const EdgeInsets.all(10),
                                 child: TextFormField(
                                   controller: companyCityController,
-                                  validator: (value) {
-                                    //city is mandatory
-                                    if (value != null && value.isNotEmpty) {
-                                      return null;
-                                    } else {
-                                      return 'Enter City';
-                                    }
-                                  },
                                   autofocus: true,
                                   decoration: InputDecoration(
                                     fillColor: offWhite,
@@ -530,14 +515,6 @@ class _CompanyDetailsState extends State<CompanyDetails> {
                                 margin: const EdgeInsets.all(10),
                                 child: TextFormField(
                                   controller: companyStateController,
-                                  validator: (value) {
-                                    //state is mandatory
-                                    if (value != null && value.isNotEmpty) {
-                                      return null;
-                                    } else {
-                                      return 'Enter State';
-                                    }
-                                  },
                                   autofocus: true,
                                   decoration: InputDecoration(
                                     fillColor: offWhite,
@@ -572,17 +549,6 @@ class _CompanyDetailsState extends State<CompanyDetails> {
                                 margin: const EdgeInsets.all(10),
                                 child: TextFormField(
                                   controller: companyPinCodeController,
-                                  validator: (value) {
-                                    //pinCode is mandatory
-                                    if (value != null &&
-                                        value.isNotEmpty &&
-                                        value.isNum &&
-                                        value.length == 6) {
-                                      return null;
-                                    } else {
-                                      return 'Enter Valid PinCode';
-                                    }
-                                  },
                                   maxLength: 6,
                                   inputFormatters: [
                                     FilteringTextInputFormatter.digitsOnly,
@@ -626,7 +592,7 @@ class _CompanyDetailsState extends State<CompanyDetails> {
                                 padding:
                                 EdgeInsets.only(left : 10),
                                 child: Text(
-                                  'GST no',
+                                  'GST no (optional)',
                                   style: GoogleFonts.montserrat(
                                     fontSize: 16,
                                     color: black,
@@ -640,7 +606,7 @@ class _CompanyDetailsState extends State<CompanyDetails> {
                                 padding:
                                 EdgeInsets.only(left : 10),
                                 child: Text(
-                                  'CIN',
+                                  'CIN (optional)',
                                   style: GoogleFonts.montserrat(
                                     fontSize: 16,
                                     color: black,
@@ -662,15 +628,6 @@ class _CompanyDetailsState extends State<CompanyDetails> {
                                 child: TextFormField(
                                   controller: companyGSTNoController,
                                   maxLength: 15,
-                                  validator: (value) {
-                                    if (value != null &&
-                                        value.isNotEmpty &&
-                                        value.length == 15) {
-                                      return null;
-                                    } else {
-                                      return 'Enter GST No';
-                                    }
-                                  },
                                   autofocus: true,
                                   decoration: InputDecoration(
                                     suffixIcon: Transform.scale(
@@ -705,15 +662,6 @@ class _CompanyDetailsState extends State<CompanyDetails> {
                                 margin: const EdgeInsets.all(10),
                                 child: TextFormField(
                                   controller: companyCinController,
-                                  validator: (value) {
-                                    if (value != null &&
-                                        value.isNotEmpty &&
-                                        value.length == 21) {
-                                      return null;
-                                    } else {
-                                      return 'Enter CIN';
-                                    }
-                                  },
                                   autofocus: true,
                                   maxLength: 21,
                                   decoration: InputDecoration(
@@ -765,13 +713,13 @@ class _CompanyDetailsState extends State<CompanyDetails> {
                                           widget.user_name,
                                           companyNameController.text,
                                           companyEmailController.text,
-                                          companyPhoneController.text,
-                                          companyAddressController.text,
-                                          companyCityController.text,
-                                          companyStateController.text,
-                                          companyPinCodeController.text,
-                                          companyGSTNoController.text,
-                                          companyCinController.text,
+                                          companyPhoneController.text ?? '',
+                                          companyAddressController.text ?? '',
+                                          companyCityController.text ?? '',
+                                          companyStateController.text ?? '',
+                                          companyPinCodeController.text ?? '',
+                                          companyGSTNoController.text ?? '',
+                                          companyCinController.text ?? '',
                                           firebaseAuth.currentUser!.email!);
 
                                       if (status) {
