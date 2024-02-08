@@ -270,80 +270,80 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
                               child: Column(
                                 children: [
                                   SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.65,
-                                    child : SingleChildScrollView(
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          SideExpandedItem(
-                                              title: "Control Tower",
-                                              iconSize: 18,
-                                              icon: ShipperNav.control_tower,
-                                              position: 0),
-                                          const SizedBox(
-                                            height: 3,
-                                          ),
-                                          SideExpandedItem(
-                                              title: "My Loads",
-                                              iconSize: 18,
-                                              icon: ShipperNav.loads,
-                                              position: 1),
-                                          const SizedBox(
-                                            height: 3,
-                                          ),
-                                          SideExpandedItem(
-                                              title: "Eway Bills",
-                                              iconSize: 18,
-                                              icon: ShipperNav.eway_bill,
-                                              position: 2),
-                                          const SizedBox(
-                                            height: 3,
-                                          ),
-                                          SideExpandedItem(
-                                              title: "Invoice",
-                                              iconSize: 18,
-                                              icon: ShipperNav.invoice,
-                                              position: 3),
-                                          const SizedBox(
-                                            height: 3,
-                                          ),
-                                          SideExpandedItem(
-                                              title: "Team",
-                                              iconSize: 18,
-                                              icon: ShipperNav.team,
-                                              position: 4),
-                                          const SizedBox(
-                                            height: 3,
-                                          ),
-                                          SideExpandedItem(
-                                              title: "Transporter",
-                                              iconSize: 18,
-                                              icon: ShipperNav.transporter,
-                                              position: 5),
-                                          const SizedBox(
-                                            height: 3,
-                                          ),
-                                          SideExpandedItem(
-                                              title: "Facility",
-                                              iconSize: 18,
-                                              icon: ShipperNav.facility,
-                                              position: 6),
-                                        ],
-                                      ),
-                                    )
-                                  ),
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.65,
+                                      child: SingleChildScrollView(
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            SideExpandedItem(
+                                                title: "Control Tower",
+                                                iconSize: 18,
+                                                icon: ShipperNav.control_tower,
+                                                position: 0),
+                                            const SizedBox(
+                                              height: 3,
+                                            ),
+                                            SideExpandedItem(
+                                                title: "My Loads",
+                                                iconSize: 18,
+                                                icon: ShipperNav.loads,
+                                                position: 1),
+                                            const SizedBox(
+                                              height: 3,
+                                            ),
+                                            SideExpandedItem(
+                                                title: "Eway Bills",
+                                                iconSize: 18,
+                                                icon: ShipperNav.eway_bill,
+                                                position: 2),
+                                            const SizedBox(
+                                              height: 3,
+                                            ),
+                                            SideExpandedItem(
+                                                title: "Invoice",
+                                                iconSize: 18,
+                                                icon: ShipperNav.invoice,
+                                                position: 3),
+                                            const SizedBox(
+                                              height: 3,
+                                            ),
+                                            SideExpandedItem(
+                                                title: "Team",
+                                                iconSize: 18,
+                                                icon: ShipperNav.team,
+                                                position: 4),
+                                            const SizedBox(
+                                              height: 3,
+                                            ),
+                                            SideExpandedItem(
+                                                title: "Transporter",
+                                                iconSize: 18,
+                                                icon: ShipperNav.transporter,
+                                                position: 5),
+                                            const SizedBox(
+                                              height: 3,
+                                            ),
+                                            SideExpandedItem(
+                                                title: "Facility",
+                                                iconSize: 18,
+                                                icon: ShipperNav.facility,
+                                                position: 6),
+                                          ],
+                                        ),
+                                      )),
                                   Expanded(
                                       child: Align(
-                                      alignment: Alignment.bottomLeft,
-                                      child: Padding(
-                                          padding:
-                                          EdgeInsets.only(bottom: 30),
-                                          child: SideExpandedItem(
-                                              title: "Liveasy",
-                                              iconSize: 23,
-                                              icon: ShipperNav.liveasy_logo,
-                                              position: 999))))
+                                          alignment: Alignment.bottomLeft,
+                                          child: Padding(
+                                              padding:
+                                                  EdgeInsets.only(bottom: 30),
+                                              child: SideExpandedItem(
+                                                  title: "Liveasy",
+                                                  iconSize: 23,
+                                                  icon: ShipperNav.liveasy_logo,
+                                                  position: 999))))
                                 ],
                               ),
                             ),
@@ -474,6 +474,15 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
               accountSelectedTabGradientColor = white;
               transporterSelectedTabGradientColor = white;
               facilitySelectedTabGradientColor = white;
+              if (_selectedIndex == 0) {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => HomeScreenWeb(
+                              index: screens.indexOf(webDashBoard),
+                              selectedIndex: screens.indexOf(webDashBoard),
+                            )));
+              }
               _selectedIndex = 0;
               _index = 0;
             } else if (title == "My Loads") {
@@ -484,6 +493,16 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
               accountSelectedTabGradientColor = white;
               transporterSelectedTabGradientColor = white;
               facilitySelectedTabGradientColor = white;
+              // If My Loads is already selected,  it will refresh the page
+              if (_selectedIndex == 1) {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => HomeScreenWeb(
+                              index: screens.indexOf(postLoadScreen),
+                              selectedIndex: screens.indexOf(postLoadScreen),
+                            )));
+              }
               _selectedIndex = 1;
               _index = 1;
             } else if (title == "Eway Bills") {
@@ -494,6 +513,16 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
               accountSelectedTabGradientColor = white;
               transporterSelectedTabGradientColor = white;
               facilitySelectedTabGradientColor = white;
+              // If Eway Bill is already selected,  it will refresh the page
+              if (_selectedIndex == 2) {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => HomeScreenWeb(
+                              index: screens.indexOf(ewayBillScreen),
+                              selectedIndex: screens.indexOf(ewayBillScreen),
+                            )));
+              }
               _selectedIndex = 2;
               _index = 2;
             } else if (title == "Invoice") {
@@ -504,6 +533,16 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
               accountSelectedTabGradientColor = white;
               transporterSelectedTabGradientColor = white;
               facilitySelectedTabGradientColor = white;
+              // If Invoice is already selected,  it will refresh the page
+              if (_selectedIndex == 3) {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => HomeScreenWeb(
+                              index: screens.indexOf(invoiceScreen),
+                              selectedIndex: screens.indexOf(invoiceScreen),
+                            )));
+              }
               _selectedIndex = 3;
               _index = 3;
             } else if (title == "Team") {
@@ -514,6 +553,17 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
               accountSelectedTabGradientColor = kLiveasyColor;
               transporterSelectedTabGradientColor = white;
               facilitySelectedTabGradientColor = white;
+              // If Team is already selected,  it will refresh the page
+              if (_selectedIndex == 4) {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => HomeScreenWeb(
+                              index: screens.indexOf(employeeListScreen),
+                              selectedIndex:
+                                  screens.indexOf(employeeListScreen),
+                            )));
+              }
               _selectedIndex = 4;
               _index = 4;
             } else if (title == "Transporter") {
@@ -524,6 +574,16 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
               accountSelectedTabGradientColor = white;
               transporterSelectedTabGradientColor = kLiveasyColor;
               facilitySelectedTabGradientColor = white;
+              // If Transporter is already selected,  it will refresh the page
+              if (_selectedIndex == 5) {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => HomeScreenWeb(
+                              index: screens.indexOf(transporter),
+                              selectedIndex: screens.indexOf(transporter),
+                            )));
+              }
               _selectedIndex = 5;
               _index = 5;
             } else if (title == "Facility") {
@@ -534,6 +594,16 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
               accountSelectedTabGradientColor = white;
               transporterSelectedTabGradientColor = white;
               facilitySelectedTabGradientColor = kLiveasyColor;
+              // If facilitiy is already selected,  it will refresh the page
+              if (_selectedIndex == 6) {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => HomeScreenWeb(
+                              index: screens.indexOf(facilities),
+                              selectedIndex: screens.indexOf(facilities),
+                            )));
+              }
               _selectedIndex = 6;
               _index = 6;
             }
