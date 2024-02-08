@@ -474,6 +474,15 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
               accountSelectedTabGradientColor = white;
               transporterSelectedTabGradientColor = white;
               facilitySelectedTabGradientColor = white;
+              if (_selectedIndex == 0) {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => HomeScreenWeb(
+                              index: screens.indexOf(webDashBoard),
+                              selectedIndex: screens.indexOf(webDashBoard),
+                            )));
+              }
               _selectedIndex = 0;
               _index = 0;
             } else if (title == "My Loads") {
