@@ -126,7 +126,7 @@ Future<String?> runShipperApiPostIsolated(
         }
 
         if (FirebaseAuth.instance.currentUser != null) {
-          createUserTraccar(phoneNo);
+          createUserTraccar();
         }
         exe = false;
         return shipperId;

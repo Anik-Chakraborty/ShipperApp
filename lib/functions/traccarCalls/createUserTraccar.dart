@@ -10,7 +10,7 @@ import 'package:shipper_app/functions/encryptDecrypt.dart';
 import '/functions/shipperApis/runShipperApiPost.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-Future<String?> createUserTraccar(String? mobileNum) async {
+Future<String?> createUserTraccar() async {
   ShipperIdController shipperIdController = Get.put(ShipperIdController());
   final String traccarUser = dotenv.get('traccarUser');
   final String traccarPass = decrypt(dotenv.get('traccarPass'));

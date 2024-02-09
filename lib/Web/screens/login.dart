@@ -259,17 +259,39 @@ class _LoginWebState extends State<LoginWeb> {
                                             await signIn(
                                                 email, password, context);
                                         if (firebaseUser != null) {
-                                          SharedPreferences prefs =
-                                              await SharedPreferences
-                                                  .getInstance();
-                                          prefs.setString(
-                                              'uid', firebaseUser.user!.uid);
 
-                                          Navigator.pushReplacement(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
+                                          bool allowToLogin = await shipperApiLogin(
+                                              emailId: firebaseUser.user!.email
+                                                  .toString());
+
+                                          if(allowToLogin){
+                                            SharedPreferences prefs =
+                                            await SharedPreferences
+                                                .getInstance();
+                                            prefs.setString(
+                                                'uid', firebaseUser.user!.uid);
+
+
+                                            if(mounted){
+                                              Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
                                                       const HomeScreenWeb()));
+                                            }
+                                          }
+                                          else{
+                                            FirebaseAuth.instance.signOut();
+                                            if(mounted){
+                                              showSnackBar(
+                                                  'No user found for this Gmail.',
+                                                  deleteButtonColor,
+                                                  const Icon(Icons.warning),
+                                                  context);
+                                            }
+                                          }
+
+
                                         }
                                       } catch (e) {
                                         debugPrint(
@@ -332,24 +354,42 @@ class _LoginWebState extends State<LoginWeb> {
                                         FirebaseAuth.instance.signOut();
                                         firebaseUser.user!.delete();
                                       } else {
-                                        SharedPreferences prefs =
-                                            await SharedPreferences
-                                                .getInstance();
-                                        prefs.setString(
-                                            'uid', firebaseUser.user!.uid);
-                                        prefs.setBool('isGoogleLogin', true);
-                                        prefs.setString('userEmail',
-                                            firebaseUser.user!.email!);
 
-                                        runShipperApiPost(
+                                        bool allowToLogin = await shipperApiLogin(
                                             emailId: firebaseUser.user!.email
                                                 .toString());
 
-                                        Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
+                                        if(allowToLogin){
+                                          SharedPreferences prefs =
+                                          await SharedPreferences
+                                              .getInstance();
+                                          prefs.setString(
+                                              'uid', firebaseUser.user!.uid);
+                                          prefs.setBool('isGoogleLogin', true);
+                                          prefs.setString('userEmail',
+                                              firebaseUser.user!.email!);
+
+
+                                          if(mounted){
+                                            Navigator.pushReplacement(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
                                                     const HomeScreenWeb()));
+                                          }
+                                        }
+                                        else{
+                                          FirebaseAuth.instance.signOut();
+                                          if(mounted){
+                                            showSnackBar(
+                                                'No user found for this Gmail.',
+                                                deleteButtonColor,
+                                                const Icon(Icons.warning),
+                                                context);
+                                          }
+                                        }
+
+
                                       }
                                     } on FirebaseAuthException catch (e) {
                                       debugPrint("Error : $e");

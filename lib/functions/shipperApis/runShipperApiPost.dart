@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
@@ -119,7 +120,7 @@ Future<String?> runShipperApiPost({
         }
 
         if (FirebaseAuth.instance.currentUser != null) {
-          createUserTraccar(phoneNo);
+          createUserTraccar();
         }
         return shipperId;
       } else {
@@ -131,5 +132,101 @@ Future<String?> runShipperApiPost({
   } catch (e) {
     print(e);
     return null;
+  }
+}
+
+
+
+Future<bool> shipperApiLogin({
+  required String emailId
+}) async {
+  try {
+    ShipperIdController shipperIdController =
+    Get.put(ShipperIdController(), permanent: true);
+
+    final String shipperApiUrl = dotenv.get('shipperApiUrl');
+
+    final response = await http.get(Uri.parse('$shipperApiUrl?emailId=$emailId'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          // HttpHeaders.authorizationHeader: firebaseToken!
+        },);
+
+    if (response.statusCode == 200) {
+      var decodedResponse = json.decode(response.body);
+      decodedResponse = decodedResponse[0];
+      if (decodedResponse["companyId"] != null || decodedResponse["companyId"].toString().isNotEmpty) {
+        String shipperId = decodedResponse["shipperId"];
+
+        bool companyApproved =
+            decodedResponse["companyApproved"].toString() == "true";
+        bool accountVerificationInProgress =
+            decodedResponse["accountVerificationInProgress"].toString() ==
+                "true";
+        String shipperLocation = decodedResponse["shipperLocation"] ?? " ";
+        String name = decodedResponse["shipperName"] ?? " ";
+        String companyName = decodedResponse["companyName"] ?? " ";
+        String companyStatus = decodedResponse["companyStatus"] ?? " ";
+        String mobileNum = decodedResponse["phoneNo"] ?? " ";
+        shipperIdController.updateShipperId(shipperId);
+        sidstorage
+            .write("shipperId", shipperId)
+            .then((value) => debugPrint("Written shipperId"));
+        shipperIdController.updateCompanyApproved(companyApproved);
+        sidstorage
+            .write("companyApproved", companyApproved)
+            .then((value) => debugPrint("Written companyApproved"));
+
+        shipperIdController.updateCompanyStatus(companyStatus);
+        sidstorage
+            .write("companyStatus", companyStatus)
+            .then((value) => debugPrint("Written companyStatus"));
+        shipperIdController.updateEmailId(emailId);
+        sidstorage
+            .write("emailId", emailId)
+            .then((value) => debugPrint("Written emailId"));
+        shipperIdController.updateMobileNum(mobileNum);
+        sidstorage
+            .write("mobileNum", mobileNum)
+            .then((value) => debugPrint("Written mobile number"));
+        shipperIdController
+            .updateAccountVerificationInProgress(accountVerificationInProgress);
+        sidstorage
+            .write(
+            "accountVerificationInProgress", accountVerificationInProgress)
+            .then((value) => debugPrint("Written accountVerificationInProgress"));
+        shipperIdController.updateShipperLocation(shipperLocation);
+        sidstorage
+            .write("shipperLocation", shipperLocation)
+            .then((value) => debugPrint("Written shipperLocation"));
+        shipperIdController.updateName(name);
+        sidstorage.write("name", name).then((value) => debugPrint("Written name"));
+        shipperIdController.updateCompanyName(companyName);
+        sidstorage
+            .write("companyName", companyName)
+            .then((value) => debugPrint("Written companyName"));
+        shipperIdController
+            .updateCompanyId(decodedResponse["companyId"].toString());
+
+        shipperIdController.updateRole(decodedResponse["roles"].toString());
+
+        if (decodedResponse["token"] != null) {
+          shipperIdController
+              .updateJmtToken(decodedResponse["token"].toString());
+        }
+
+        if (FirebaseAuth.instance.currentUser != null) {
+          createUserTraccar();
+        }
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  } catch (e) {
+    debugPrint(e.toString());
+    return false;
   }
 }
