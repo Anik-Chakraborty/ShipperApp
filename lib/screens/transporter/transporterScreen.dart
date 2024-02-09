@@ -182,8 +182,13 @@ class _TransporterScreenState extends State<TransporterScreen> {
                 // It displays list of transporters
                 List data = snapshot.data!;
 
-                if(data.isEmpty){
-                  return const Center(child: Text('No transporter added', style: TextStyle(fontFamily: "Montserrat", fontSize: 20, color: kLiveasyColor)),);
+                if (data.isEmpty) {
+                  return const Center(
+                      child: Text('No transporter added',
+                          style: TextStyle(
+                              fontFamily: "Montserrat",
+                              fontSize: 20,
+                              color: kLiveasyColor)));
                 }
 
                 return ListView.separated(
