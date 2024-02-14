@@ -1,10 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:shipper_app/Web/screens/home_web.dart';
 import 'package:shipper_app/constants/fontSize.dart';
 import 'package:shipper_app/constants/fontWeights.dart';
 import 'package:shipper_app/constants/screens.dart';
-import 'package:shipper_app/functions/alert_dialog.dart';
+import 'package:shipper_app/controller/homeWebController.dart';
 import 'package:shipper_app/responsive.dart';
 import '/constants/colors.dart';
 import '/constants/spaces.dart';
@@ -21,6 +20,9 @@ class nextButton extends StatefulWidget {
 }
 
 class _nextButtonState extends State<nextButton> {
+
+  HomeWebController homeWebController = Get.put(HomeWebController());
+
   @override
   Widget build(BuildContext context) {
     ProviderData providerData = Provider.of<ProviderData>(context);
@@ -36,7 +38,7 @@ class _nextButtonState extends State<nextButton> {
                       RoundedRectangleBorder(
                     borderRadius: (Responsive.isMobile(context))
                         ? BorderRadius.circular(50)
-                        : BorderRadius.all(Radius.zero),
+                        : const BorderRadius.all(Radius.zero),
                   )),
                   backgroundColor: providerData.postLoadScreenOneButton()
                       ? MaterialStateProperty.all<Color>(truckGreen)
@@ -53,15 +55,8 @@ class _nextButtonState extends State<nextButton> {
               onPressed: () {
                 providerData.postLoadScreenOneButton()
                     ? ((kIsWeb)
-                        ? Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => HomeScreenWeb(
-                                      index: screens.indexOf(postLoadScreenTwo),
-                                      selectedIndex:
-                                          screens.indexOf(postLoadScreen),
-                                    )))
-                        : Get.to(() => PostLoadScreenTwo()))
+                        ? homeWebController.changeVisibleWidgetWithSideBarSelectedIndex(const PostLoadScreenTwo(), screens.indexOf(postLoadScreen))
+                        : Get.to(() => const PostLoadScreenTwo()))
                     : null;
               }),
         ),

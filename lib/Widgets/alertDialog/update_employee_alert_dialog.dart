@@ -9,7 +9,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shipper_app/constants/colors.dart';
-import 'package:shipper_app/functions/shipperId_fromCompaniesDatabase.dart';
+import 'package:shipper_app/controller/homeWebController.dart';
 import 'package:shipper_app/responsive.dart';
 import '../../screens/employee_list_with_roles_screen.dart';
 import '../../Web/screens/home_web.dart';
@@ -31,6 +31,9 @@ class UpdateEmployeeRole extends StatefulWidget {
 }
 
 class _UpdateEmployeeRoleState extends State<UpdateEmployeeRole> {
+
+  HomeWebController homeWebController = Get.put(HomeWebController());
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -126,17 +129,7 @@ class _UpdateEmployeeRoleState extends State<UpdateEmployeeRole> {
                 body: body);
 
         if (response.statusCode == 200) {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => kIsWeb
-                    ? HomeScreenWeb(
-                        index: screens.indexOf(employeeListScreen),
-                        selectedIndex:
-                            screens.indexOf(accountVerificationStatusScreen),
-                      )
-                    : const EmployeeListRolesScreen(),
-              ));
+          homeWebController.changeVisibleWidgetWithSideBarSelectedIndex(const EmployeeListRolesScreen(), screens.indexOf(accountVerificationStatusScreen));
         } else {
           debugPrint('Something wrong');
         }

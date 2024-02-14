@@ -4,6 +4,7 @@ import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -12,10 +13,12 @@ import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:shipper_app/Widgets/custom_Info_Window.dart';
 import 'package:shipper_app/constants/colors.dart';
+import 'package:shipper_app/controller/homeWebController.dart';
 import 'package:shipper_app/functions/bookingApiCalls.dart';
 import 'package:shipper_app/functions/ongoingTrackUtils/FastTag.dart';
 import 'package:shipper_app/functions/trackScreenFunctions.dart';
 import 'package:shipper_app/models/BookingModel.dart';
+import 'package:shipper_app/screens/Eway_Bills_Screen.dart';
 import 'package:shipper_app/screens/tryAgainScreen.dart';
 
 class TrackAllFastagScreen extends StatefulWidget {
@@ -27,6 +30,8 @@ class TrackAllFastagScreen extends StatefulWidget {
 }
 
 class _TrackAllFastagScreenState extends State<TrackAllFastagScreen> {
+  HomeWebController homeWebController = Get.put(HomeWebController());
+
   GlobalKey _mapKey = GlobalKey();
   OverlayEntry? _overlayEntry;
   final double customInfoWindowWidth = 200; // Adjust as needed
@@ -383,7 +388,12 @@ void dispose() {
                 children: [
                   IconButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      if(kIsWeb){
+                        homeWebController.changeVisibleWidget(const EwayBills());
+                      }
+                      else{
+                        Navigator.pop(context);
+                      }
                     },
                     icon: const Icon(Icons.arrow_back_ios_new,
                         color: darkBlueColor),

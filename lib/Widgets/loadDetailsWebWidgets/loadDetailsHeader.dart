@@ -5,12 +5,15 @@ import 'package:get/get.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:shipper_app/constants/colors.dart';
 import 'package:shipper_app/constants/fontSize.dart';
+import 'package:shipper_app/controller/homeWebController.dart';
 import 'package:shipper_app/responsive.dart';
 
 class LoadDetailsHeader extends StatelessWidget {
   String? title, subTitle;
   var previousScreen;
   Function? reset;
+
+  HomeWebController homeWebController = Get.put(HomeWebController());
 
   LoadDetailsHeader(
       {super.key,
@@ -25,14 +28,14 @@ class LoadDetailsHeader extends StatelessWidget {
       surfaceTintColor: transparent,
       elevation: 0,
       // without card widget 'Material Widget required' will be thrown while running the application for android
-      margin: EdgeInsets.all(0),
+      margin: const EdgeInsets.all(0),
       child: Container(
         padding: EdgeInsets.only(
             top: (kIsWeb && Responsive.isMobile(context)) ? 0 : 15,
             bottom: 15,
             left: 15,
             right: MediaQuery.of(context).size.width * 0.047),
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.white,
         ),
         child: Row(
@@ -43,11 +46,8 @@ class LoadDetailsHeader extends StatelessWidget {
               children: [
                 IconButton(
                   onPressed: () {
-                    if (previousScreen != null) {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => previousScreen));
+                    if (previousScreen != null && kIsWeb) {
+                      homeWebController.changeVisibleWidget(previousScreen);
                     } else {
                       Get.back();
                     }

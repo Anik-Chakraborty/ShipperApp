@@ -1,45 +1,38 @@
 // ignore_for_file: non_constant_identifier_names
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:shipper_app/Web/screens/web_dashboard.dart';
 import 'package:shipper_app/Widgets/accountPopup.dart';
 import 'package:shipper_app/Widgets/addLocationDrawerWidget.dart';
 import 'package:shipper_app/constants/shipper_nav_icons.dart';
 import 'package:shipper_app/controller/addLocationDrawerToggleController.dart';
+import 'package:shipper_app/controller/homeWebController.dart';
 import 'package:shipper_app/responsive.dart';
 import 'package:shipper_app/functions/shipperApis/isolatedShipperGetData.dart';
-import '../../constants/screens.dart';
-import '/constants/colors.dart';
+import 'package:shipper_app/constants/screens.dart';
+import 'package:shipper_app/constants/colors.dart';
+import 'package:shipper_app/screens/Eway_Bills_Screen.dart';
+import 'package:shipper_app/screens/Invoice_screen.dart';
+import 'package:shipper_app/screens/PostLoadScreens/postLoadScreen.dart';
+import 'package:shipper_app/screens/employee_list_with_roles_screen.dart';
+import 'package:shipper_app/screens/facilities.dart';
+import 'package:shipper_app/screens/transporter/transporterScreen.dart';
 import 'package:sizer/sizer.dart';
-import '../logo.dart';
+import 'package:shipper_app/Web/logo.dart';
 
 class HomeScreenWeb extends StatefulWidget {
-  final Widget? visibleWidget;
-  final int? index;
-  final int? selectedIndex;
 
-  const HomeScreenWeb(
-      {Key? key, this.index, this.selectedIndex, this.visibleWidget})
-      : super(key: key);
+  const HomeScreenWeb({Key? key}) : super(key: key);
 
   @override
   State<HomeScreenWeb> createState() => _HomeScreenWebState();
 }
 
 class _HomeScreenWebState extends State<HomeScreenWeb> {
-  int _selectedIndex = 0;
-  int _index = 0;
-  late Color dashboardSelectedTabGradientColor,
-      myLoadsSelectedTabGradientColor,
-      ewayBillsSelectedTabGradientColor,
-      invoiceSelectedTabGradientColor,
-      transporterSelectedTabGradientColor,
-      accountSelectedTabGradientColor,
-      liveasySelectedTabGradientColor,
-      facilitySelectedTabGradientColor;
 
-  late bool expandMode;
-  late double widthOfSideBar;
+  HomeWebController homeWebController = Get.put(HomeWebController());
+
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -50,57 +43,6 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
   void initState() {
     super.initState();
     isolatedShipperGetData();
-
-    if (widget.index != null) {
-      setState(() {
-        _index = widget.index!;
-        _selectedIndex = widget.selectedIndex!;
-      });
-    }
-    expandMode = true;
-    if (expandMode) {
-      widthOfSideBar = 220;
-    } else {
-      widthOfSideBar = 110;
-    }
-    if (_selectedIndex == 0) {
-      dashboardSelectedTabGradientColor = kLiveasyColor;
-    } else {
-      dashboardSelectedTabGradientColor = white;
-    }
-
-    if (_selectedIndex == 1) {
-      myLoadsSelectedTabGradientColor = kLiveasyColor;
-    } else {
-      myLoadsSelectedTabGradientColor = white;
-    }
-    if (_selectedIndex == 2) {
-      ewayBillsSelectedTabGradientColor = kLiveasyColor;
-    } else {
-      ewayBillsSelectedTabGradientColor = white;
-    }
-    if (_selectedIndex == 3) {
-      invoiceSelectedTabGradientColor = kLiveasyColor;
-    } else {
-      invoiceSelectedTabGradientColor = white;
-    }
-    if (_selectedIndex == 4) {
-      accountSelectedTabGradientColor = kLiveasyColor;
-    } else {
-      accountSelectedTabGradientColor = white;
-    }
-    if (_selectedIndex == 5) {
-      transporterSelectedTabGradientColor = kLiveasyColor;
-    } else {
-      transporterSelectedTabGradientColor = white;
-    }
-    if (_selectedIndex == 6) {
-      facilitySelectedTabGradientColor = kLiveasyColor;
-    } else {
-      facilitySelectedTabGradientColor = white;
-    }
-
-    liveasySelectedTabGradientColor = white;
   }
 
   //TODO: This is the list for Navigation Rail List Destinations,This contains icons and it's labels
@@ -114,9 +56,9 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
     const BottomNavigationBarItem(
         icon: Icon(Icons.receipt_long), label: "Eway Bills"),
     const BottomNavigationBarItem(
-        icon: Icon(Icons.person_outline_outlined), label: "Account"),
+        icon: Icon(FontAwesomeIcons.fileInvoice), label: "Invoice"),
     const BottomNavigationBarItem(
-        icon: Icon(Icons.supervised_user_circle_outlined), label: "Add User"),
+        icon: Icon(Icons.supervised_user_circle_outlined), label: "Team"),
     const BottomNavigationBarItem(
         icon: Icon(Icons.local_shipping), label: "Transporter"),
     const BottomNavigationBarItem(
@@ -145,16 +87,10 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
                 unselectedItemColor: Colors.blueGrey,
                 showUnselectedLabels: true,
                 items: bottom_destinations,
-                currentIndex: _selectedIndex,
+                currentIndex: homeWebController.sideBarSelectedIndex.value,
                 onTap: (updatedIndex) {
-                  setState(() {
-                    if (updatedIndex == 2 || updatedIndex == 3) {
-                      _index = updatedIndex + 1;
-                    } else {
-                      _index = updatedIndex;
-                    }
-                    _selectedIndex = updatedIndex;
-                  });
+                    homeWebController.changeSideBarSelectedIndex( updatedIndex);
+                    homeWebController.changeVisibleWidget(screens[updatedIndex]);
                 },
               )
             : null,
@@ -198,7 +134,7 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
                   ),
                 ),
               ),
-              const Expanded(child: const SizedBox())
+              const Expanded(child: SizedBox())
             ],
           ),
           actions: [
@@ -233,13 +169,6 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
                 height: 40,
                 child: AccountMenuButton(
                   screens: screens,
-                  accountVerificationStatusScreen:
-                      accountVerificationStatusScreen,
-                  updateIndex: (int newIndex) {
-                    setState(() {
-                      _index = newIndex;
-                    });
-                  },
                 ),
               ),
             ),
@@ -252,163 +181,229 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
                 ? const SizedBox(
                     width: 0.01,
                   )
-                : Container(
-                    child: Stack(
-                      children: [
-                        Row(children: [
-                          Card(
-                            surfaceTintColor: transparent,
-                            shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(Radius.zero)),
-                            elevation: 5,
-                            shadowColor: Colors.grey,
-                            child: Container(
-                              padding: const EdgeInsets.only(
-                                  left: 15, right: 15, top: 50),
-                              width: widthOfSideBar,
-                              color: white,
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.65,
-                                      child: SingleChildScrollView(
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            SideExpandedItem(
-                                                title: "Control Tower",
-                                                iconSize: 18,
-                                                icon: ShipperNav.control_tower,
-                                                position: 0),
-                                            const SizedBox(
-                                              height: 3,
-                                            ),
-                                            SideExpandedItem(
-                                                title: "My Loads",
-                                                iconSize: 18,
-                                                icon: ShipperNav.loads,
-                                                position: 1),
-                                            const SizedBox(
-                                              height: 3,
-                                            ),
-                                            SideExpandedItem(
-                                                title: "Eway Bills",
-                                                iconSize: 18,
-                                                icon: ShipperNav.eway_bill,
-                                                position: 2),
-                                            const SizedBox(
-                                              height: 3,
-                                            ),
-                                            SideExpandedItem(
-                                                title: "Invoice",
-                                                iconSize: 18,
-                                                icon: ShipperNav.invoice,
-                                                position: 3),
-                                            const SizedBox(
-                                              height: 3,
-                                            ),
-                                            SideExpandedItem(
-                                                title: "Team",
-                                                iconSize: 18,
-                                                icon: ShipperNav.team,
-                                                position: 4),
-                                            const SizedBox(
-                                              height: 3,
-                                            ),
-                                            SideExpandedItem(
-                                                title: "Transporter",
-                                                iconSize: 18,
-                                                icon: ShipperNav.transporter,
-                                                position: 5),
-                                            const SizedBox(
-                                              height: 3,
-                                            ),
-                                            SideExpandedItem(
-                                                title: "Facility",
-                                                iconSize: 18,
-                                                icon: ShipperNav.facility,
-                                                position: 6),
-                                          ],
-                                        ),
-                                      )),
-                                  Expanded(
-                                      child: Align(
-                                          alignment: Alignment.bottomLeft,
-                                          child: Padding(
-                                              padding:
-                                                  EdgeInsets.only(bottom: 30),
-                                              child: SideExpandedItem(
-                                                  title: "Liveasy",
-                                                  iconSize: 23,
-                                                  icon: ShipperNav.liveasy_logo,
-                                                  position: 999))))
-                                ],
+                : Stack(
+                  children: [
+                    Row(children: [
+                      Card(
+                        surfaceTintColor: transparent,
+                        shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.zero)),
+                        elevation: 5,
+                        shadowColor: Colors.grey,
+                        child: Container(
+                          padding: const EdgeInsets.only(
+                              left: 15, right: 15, top: 50),
+                          width: homeWebController.sideBarWidth.value,
+                          color: white,
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: MediaQuery.of(context).size.height *
+                                    0.65,
+                                child : SingleChildScrollView(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      SideExpandedItem(
+                                          onClick: (){
+                                            if(homeWebController.sideBarSelectedIndex.value == 0){
+                                              homeWebController.refreshVisibleWidget();
+                                              Future.delayed(const Duration(milliseconds: 500), () => homeWebController.changeVisibleWidget(const WebDashBoard()));
+                                            }
+                                            else{
+                                              homeWebController.changeSideBarSelectedIndex(0);
+                                              homeWebController.changeVisibleWidget(const WebDashBoard());
+                                            }
+                                          },
+                                          title: "Control Tower",
+                                          iconSize: 18,
+                                          icon: ShipperNav.control_tower,
+                                          position: 0),
+                                      const SizedBox(
+                                        height: 3,
+                                      ),
+                                      SideExpandedItem(
+                                          onClick: (){
+                                            if(homeWebController.sideBarSelectedIndex.value == 1){
+                                              homeWebController.refreshVisibleWidget();
+                                              Future.delayed(const Duration(milliseconds: 500), () => homeWebController.changeVisibleWidget(const PostLoadScreen()));
+                                            }
+                                            else{
+                                              homeWebController.changeSideBarSelectedIndex(1);
+                                              homeWebController.changeVisibleWidget(const PostLoadScreen());
+                                            }
+                                          },
+                                          title: "My Loads",
+                                          iconSize: 18,
+                                          icon: ShipperNav.loads,
+                                          position: 1),
+                                      const SizedBox(
+                                        height: 3,
+                                      ),
+                                      SideExpandedItem(
+                                          onClick: (){
+                                            if(homeWebController.sideBarSelectedIndex.value == 2){
+                                              homeWebController.refreshVisibleWidget();
+                                              Future.delayed(const Duration(milliseconds: 500), () => homeWebController.changeVisibleWidget(const EwayBills()));
+                                            }
+                                            else{
+                                              homeWebController.changeSideBarSelectedIndex(2);
+                                              homeWebController.changeVisibleWidget(const EwayBills());
+                                            }
+                                          },
+                                          title: "Eway Bills",
+                                          iconSize: 18,
+                                          icon: ShipperNav.eway_bill,
+                                          position: 2),
+                                      const SizedBox(
+                                        height: 3,
+                                      ),
+                                      SideExpandedItem(
+                                          onClick: (){
+                                            if(homeWebController.sideBarSelectedIndex.value == 3){
+                                              homeWebController.refreshVisibleWidget();
+                                              Future.delayed(const Duration(milliseconds: 500), () => homeWebController.changeVisibleWidget(const InvoiceScreen()));
+                                            }
+                                            else{
+                                              homeWebController.changeSideBarSelectedIndex(3);
+                                              homeWebController.changeVisibleWidget(const InvoiceScreen());
+                                            }
+                                          },
+                                          title: "Invoice",
+                                          iconSize: 18,
+                                          icon: ShipperNav.invoice,
+                                          position: 3),
+                                      const SizedBox(
+                                        height: 3,
+                                      ),
+                                      SideExpandedItem(
+                                          onClick: (){
+                                            if(homeWebController.sideBarSelectedIndex.value == 4){
+                                              homeWebController.refreshVisibleWidget();
+                                              Future.delayed(const Duration(milliseconds: 500), () => homeWebController.changeVisibleWidget(const EmployeeListRolesScreen()));
+                                            }
+                                            else{
+                                              homeWebController.changeSideBarSelectedIndex(4);
+                                              homeWebController.changeVisibleWidget(const EmployeeListRolesScreen());
+                                            }
+                                          },
+                                          title: "Team",
+                                          iconSize: 18,
+                                          icon: ShipperNav.team,
+                                          position: 4),
+                                      const SizedBox(
+                                        height: 3,
+                                      ),
+                                      SideExpandedItem(
+                                          onClick: (){
+                                            if(homeWebController.sideBarSelectedIndex.value == 5){
+                                              homeWebController.refreshVisibleWidget();
+                                              Future.delayed(const Duration(milliseconds: 500), () => homeWebController.changeVisibleWidget(const TransporterScreen()));
+                                            }
+                                            else{
+                                              homeWebController.changeSideBarSelectedIndex(5);
+                                              homeWebController.changeVisibleWidget(const TransporterScreen());
+                                            }
+                                          },
+                                          title: "Transporter",
+                                          iconSize: 18,
+                                          icon: ShipperNav.transporter,
+                                          position: 5),
+                                      const SizedBox(
+                                        height: 3,
+                                      ),
+                                      SideExpandedItem(
+                                          onClick: (){
+                                            if(homeWebController.sideBarSelectedIndex.value == 6){
+                                              homeWebController.refreshVisibleWidget();
+                                              Future.delayed(const Duration(milliseconds: 500), () => homeWebController.changeVisibleWidget(const Facilities()));
+                                            }
+                                            else{
+                                              homeWebController.changeSideBarSelectedIndex(6);
+                                              homeWebController.changeVisibleWidget(const Facilities());
+                                            }
+                                          },
+                                          title: "Facility",
+                                          iconSize: 18,
+                                          icon: ShipperNav.facility,
+                                          position: 6),
+                                    ],
+                                  ),
+                                )
                               ),
-                            ),
-                          ),
-                          Container(
-                            color: headerLightBlueColor,
-                            width: 15,
-                          )
-                        ]),
-                        Positioned(
-                          left: widthOfSideBar - 10,
-                          top: (MediaQuery.of(context).size.height -
-                                  AppBar().preferredSize.height) *
-                              0.45,
-                          height: 30,
-                          width: 30,
-                          child: Container(
-                            decoration: BoxDecoration(
-                                border:
-                                    Border.all(color: Colors.black, width: 1),
-                                borderRadius: BorderRadius.circular(50),
-                                color: white),
-                            child: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  if (expandMode) {
-                                    expandMode = false;
-                                    widthOfSideBar = 110;
-                                  } else {
-                                    expandMode = true;
-                                    widthOfSideBar = 220;
-                                  }
-                                });
-                              },
-                              iconSize: 20,
-                              padding: EdgeInsets.zero,
-                              icon: Icon(
-                                  (expandMode)
-                                      ? Icons.arrow_back_ios_rounded
-                                      : Icons.arrow_forward_ios_rounded,
-                                  color: darkBlueTextColor,
-                                  size: 20),
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    const MaterialStatePropertyAll<Color>(
-                                        white),
-                                side: MaterialStateProperty.all(
-                                  const BorderSide(
-                                      width: 1, color: Colors.black),
-                                ),
-                              ),
-                              hoverColor: Colors.transparent,
-                            ),
+                              Expanded(
+                                  child: Align(
+                                  alignment: Alignment.bottomLeft,
+                                  child: Padding(
+                                      padding:
+                                      const EdgeInsets.only(bottom: 30),
+                                      child: SideExpandedItem(
+                                          onClick: (){},
+                                          title: "Liveasy",
+                                          iconSize: 23,
+                                          icon: ShipperNav.liveasy_logo,
+                                          position: 7))))
+                            ],
                           ),
                         ),
-                      ],
+                      ),
+                      Container(
+                        color: headerLightBlueColor,
+                        width: 15,
+                      )
+                    ]),
+                    Positioned(
+                      left: homeWebController.sideBarWidth.value - 10,
+                      top: (MediaQuery.of(context).size.height -
+                              AppBar().preferredSize.height) *
+                          0.45,
+                      height: 30,
+                      width: 30,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            border:
+                                Border.all(color: Colors.black, width: 1),
+                            borderRadius: BorderRadius.circular(50),
+                            color: white),
+                        child: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              if (homeWebController.sideBarIsExpanded.value) {
+                                homeWebController.changeSideBarExpandMode(false);
+                                homeWebController.changeSideBarWidth(homeWebController.sideBarIsExpanded.value);
+                              } else {
+                                homeWebController.changeSideBarExpandMode(true);
+                                homeWebController.changeSideBarWidth(homeWebController.sideBarIsExpanded.value);
+                              }
+                            });
+                          },
+                          iconSize: 20,
+                          padding: EdgeInsets.zero,
+                          icon: Icon(
+                              (homeWebController.sideBarIsExpanded.value)
+                                  ? Icons.arrow_back_ios_rounded
+                                  : Icons.arrow_forward_ios_rounded,
+                              color: darkBlueTextColor,
+                              size: 20),
+                          style: ButtonStyle(
+                            backgroundColor:
+                                const MaterialStatePropertyAll<Color>(
+                                    white),
+                            side: MaterialStateProperty.all(
+                              const BorderSide(
+                                  width: 1, color: Colors.black),
+                            ),
+                          ),
+                          hoverColor: Colors.transparent,
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
+                ),
 
             Expanded(
-              child: Container(
-                child: Center(
-                  child:
-                      (_index == 1000) ? widget.visibleWidget : screens[_index],
-                ),
+              child: Center(
+                child: homeWebController.visibleWidget.value
               ),
             ),
           ],
@@ -421,224 +416,29 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
       {required String title,
       required IconData icon,
       required int position,
-      required double iconSize}) {
-    if (_selectedIndex == 0) {
-      dashboardSelectedTabGradientColor = kLiveasyColor;
-    } else {
-      dashboardSelectedTabGradientColor = white;
-    }
-
-    if (_selectedIndex == 1) {
-      myLoadsSelectedTabGradientColor = kLiveasyColor;
-    } else {
-      myLoadsSelectedTabGradientColor = white;
-    }
-
-    if (_selectedIndex == 2) {
-      ewayBillsSelectedTabGradientColor = kLiveasyColor;
-    } else {
-      ewayBillsSelectedTabGradientColor = white;
-    }
-
-    if (_selectedIndex == 3) {
-      invoiceSelectedTabGradientColor = kLiveasyColor;
-    } else {
-      invoiceSelectedTabGradientColor = white;
-    }
-    if (_selectedIndex == 4) {
-      accountSelectedTabGradientColor = kLiveasyColor;
-    } else {
-      accountSelectedTabGradientColor = white;
-    }
-    if (_selectedIndex == 5) {
-      transporterSelectedTabGradientColor = kLiveasyColor;
-    } else {
-      transporterSelectedTabGradientColor = white;
-    }
-    if (_selectedIndex == 6) {
-      facilitySelectedTabGradientColor = kLiveasyColor;
-    } else {
-      facilitySelectedTabGradientColor = white;
-    }
-
-    liveasySelectedTabGradientColor = white;
+      required double iconSize,
+      required Function onClick}) {
 
     return InkWell(
         onTap: () {
-          setState(() {
-            if (title == "Control Tower") {
-              dashboardSelectedTabGradientColor = kLiveasyColor;
-              myLoadsSelectedTabGradientColor = white;
-              ewayBillsSelectedTabGradientColor = white;
-              invoiceSelectedTabGradientColor = white;
-              accountSelectedTabGradientColor = white;
-              transporterSelectedTabGradientColor = white;
-              facilitySelectedTabGradientColor = white;
-              if (_selectedIndex == 0) {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => HomeScreenWeb(
-                              index: screens.indexOf(webDashBoard),
-                              selectedIndex: screens.indexOf(webDashBoard),
-                            )));
-              }
-              _selectedIndex = 0;
-              _index = 0;
-            } else if (title == "My Loads") {
-              dashboardSelectedTabGradientColor = white;
-              myLoadsSelectedTabGradientColor = kLiveasyColor;
-              ewayBillsSelectedTabGradientColor = white;
-              invoiceSelectedTabGradientColor = white;
-              accountSelectedTabGradientColor = white;
-              transporterSelectedTabGradientColor = white;
-              facilitySelectedTabGradientColor = white;
-              // If My Loads is already selected,  it will refresh the page
-              if (_selectedIndex == 1) {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => HomeScreenWeb(
-                              index: screens.indexOf(postLoadScreen),
-                              selectedIndex: screens.indexOf(postLoadScreen),
-                            )));
-              }
-              _selectedIndex = 1;
-              _index = 1;
-            } else if (title == "Eway Bills") {
-              dashboardSelectedTabGradientColor = white;
-              myLoadsSelectedTabGradientColor = white;
-              ewayBillsSelectedTabGradientColor = kLiveasyColor;
-              invoiceSelectedTabGradientColor = white;
-              accountSelectedTabGradientColor = white;
-              transporterSelectedTabGradientColor = white;
-              facilitySelectedTabGradientColor = white;
-              // If Eway Bill is already selected,  it will refresh the page
-              if (_selectedIndex == 2) {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => HomeScreenWeb(
-                              index: screens.indexOf(ewayBillScreen),
-                              selectedIndex: screens.indexOf(ewayBillScreen),
-                            )));
-              }
-              _selectedIndex = 2;
-              _index = 2;
-            } else if (title == "Invoice") {
-              dashboardSelectedTabGradientColor = white;
-              myLoadsSelectedTabGradientColor = white;
-              ewayBillsSelectedTabGradientColor = white;
-              invoiceSelectedTabGradientColor = kLiveasyColor;
-              accountSelectedTabGradientColor = white;
-              transporterSelectedTabGradientColor = white;
-              facilitySelectedTabGradientColor = white;
-              // If Invoice is already selected,  it will refresh the page
-              if (_selectedIndex == 3) {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => HomeScreenWeb(
-                              index: screens.indexOf(invoiceScreen),
-                              selectedIndex: screens.indexOf(invoiceScreen),
-                            )));
-              }
-              _selectedIndex = 3;
-              _index = 3;
-            } else if (title == "Team") {
-              dashboardSelectedTabGradientColor = white;
-              myLoadsSelectedTabGradientColor = white;
-              ewayBillsSelectedTabGradientColor = white;
-              invoiceSelectedTabGradientColor = white;
-              accountSelectedTabGradientColor = kLiveasyColor;
-              transporterSelectedTabGradientColor = white;
-              facilitySelectedTabGradientColor = white;
-              // If Team is already selected,  it will refresh the page
-              if (_selectedIndex == 4) {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => HomeScreenWeb(
-                              index: screens.indexOf(employeeListScreen),
-                              selectedIndex:
-                                  screens.indexOf(employeeListScreen),
-                            )));
-              }
-              _selectedIndex = 4;
-              _index = 4;
-            } else if (title == "Transporter") {
-              dashboardSelectedTabGradientColor = white;
-              myLoadsSelectedTabGradientColor = white;
-              ewayBillsSelectedTabGradientColor = white;
-              invoiceSelectedTabGradientColor = white;
-              accountSelectedTabGradientColor = white;
-              transporterSelectedTabGradientColor = kLiveasyColor;
-              facilitySelectedTabGradientColor = white;
-              // If Transporter is already selected,  it will refresh the page
-              if (_selectedIndex == 5) {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => HomeScreenWeb(
-                              index: screens.indexOf(transporter),
-                              selectedIndex: screens.indexOf(transporter),
-                            )));
-              }
-              _selectedIndex = 5;
-              _index = 5;
-            } else if (title == "Facility") {
-              dashboardSelectedTabGradientColor = white;
-              myLoadsSelectedTabGradientColor = white;
-              ewayBillsSelectedTabGradientColor = white;
-              invoiceSelectedTabGradientColor = white;
-              accountSelectedTabGradientColor = white;
-              transporterSelectedTabGradientColor = white;
-              facilitySelectedTabGradientColor = kLiveasyColor;
-              // If facilitiy is already selected,  it will refresh the page
-              if (_selectedIndex == 6) {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => HomeScreenWeb(
-                              index: screens.indexOf(facilities),
-                              selectedIndex: screens.indexOf(facilities),
-                            )));
-              }
-              _selectedIndex = 6;
-              _index = 6;
-            }
-          });
+            onClick();
         },
         child: Container(
             height: 60,
             padding: const EdgeInsets.only(left: 15, top: 15, bottom: 15),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: (title == "Liveasy")
-                    ? liveasySelectedTabGradientColor
-                    : (title == "Control Tower")
-                        ? dashboardSelectedTabGradientColor
-                        : (title == "My Loads")
-                            ? myLoadsSelectedTabGradientColor
-                            : (title == "Eway Bills")
-                                ? ewayBillsSelectedTabGradientColor
-                                : (title == "Invoice")
-                                    ? invoiceSelectedTabGradientColor
-                                    : (title == "Team")
-                                        ? accountSelectedTabGradientColor
-                                        : (title == "Transporter")
-                                            ? transporterSelectedTabGradientColor
-                                            : facilitySelectedTabGradientColor),
+                color: homeWebController.sideBarSelectedIndex.value == position ? kLiveasyColor : Colors.white),
             child: Row(
               children: [
                 Icon(icon,
                     size: iconSize,
-                    color: position == _selectedIndex ? white : darkBlueColor),
+                    color: position == homeWebController.sideBarSelectedIndex.value ? white : darkBlueColor),
                 const SizedBox(
                   width: 10,
                 ),
                 Visibility(
-                    visible: expandMode,
+                    visible: homeWebController.sideBarIsExpanded.value,
                     child: (title == "Liveasy")
                         ? Text(
                             title,
@@ -646,7 +446,7 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
                                 fontSize: 23,
                                 fontWeight: FontWeight.w500,
                                 fontFamily: "Montserrat Bold",
-                                color: position == _selectedIndex
+                                color: position == homeWebController.sideBarSelectedIndex.value
                                     ? white
                                     : darkBlueColor),
                           )
@@ -655,7 +455,7 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
                             style: TextStyle(
                                 fontSize: 18,
                                 fontFamily: "Montserrat",
-                                color: (position == _selectedIndex)
+                                color: (position == homeWebController.sideBarSelectedIndex.value)
                                     ? white
                                     : darkBlueColor),
                           ))

@@ -1,27 +1,17 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:ui';
-import 'package:app_settings/app_settings.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_background_service/flutter_background_service.dart';
-import 'package:flutter_background_service_android/flutter_background_service_android.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import 'package:get_storage/get_storage.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:shipper_app/Web/screens/home_web.dart';
 import 'package:shipper_app/constants/colors.dart';
 import 'package:shipper_app/constants/screens.dart';
 import 'package:shipper_app/constants/spaces.dart';
+import 'package:shipper_app/controller/homeWebController.dart';
 import 'package:shipper_app/controller/shipperIdController.dart';
 import 'package:shipper_app/functions/documentApi/getDocument.dart';
-import 'package:shipper_app/functions/firebaseAuthentication/signIn.dart';
-import 'package:shipper_app/functions/shipperApis/isolatedShipperGetData.dart';
-import 'package:shipper_app/functions/traccarDriverApiCalls.dart';
 import 'package:shipper_app/providerClass/drawerProviderClassData.dart';
+import 'package:shipper_app/screens/PostLoadScreens/postLoadScreen.dart';
 import 'package:shipper_app/screens/findLoadScreen.dart';
 import 'package:shipper_app/screens/navigationScreen.dart';
 import 'package:shipper_app/widgets/accountNotVerifiedWidget.dart';
@@ -33,7 +23,6 @@ import 'package:shipper_app/widgets/referAndEarnWidget.dart';
 import 'package:shipper_app/widgets/searchLoadWidget.dart';
 import 'package:provider/provider.dart';
 import 'package:shipper_app/widgets/buttons/postLoadButton.dart';
-import 'package:geocoding/geocoding.dart';
 
 // ignore: must_be_immutable
 class HomeScreen extends StatefulWidget {
@@ -43,6 +32,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  HomeWebController homeWebController = Get.put(HomeWebController());
 
   ShipperIdController shipperIdController =
       kIsWeb ? Get.put(ShipperIdController()) : Get.find<ShipperIdController>();
@@ -68,10 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
           key: _scaffoldKey,
           floatingActionButton: PostButtonLoad(
               previousScreen: (kIsWeb)
-                  ? HomeScreenWeb(
-                      index: screens.indexOf(postLoadScreen),
-                      selectedIndex: screens.indexOf(postLoadScreen),
-                    )
+                  ? homeWebController.changeVisibleWidgetWithSideBarSelectedIndex(const PostLoadScreen(), screens.indexOf(postLoadScreen))
                   : NavigationScreen()),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerFloat,
@@ -114,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           LiveasyTitleTextWidget(),
                         ],
                       ),
-                      HelpButtonWidget()
+                      const HelpButtonWidget()
                     ],
                   ),
                 ),

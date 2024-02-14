@@ -7,6 +7,7 @@ import 'package:shipper_app/Web/screens/home_web.dart';
 import 'package:shipper_app/constants/colors.dart';
 import 'package:shipper_app/constants/fontSize.dart';
 import 'package:shipper_app/constants/screens.dart';
+import 'package:shipper_app/controller/homeWebController.dart';
 import 'package:shipper_app/providerClass/providerData.dart';
 import 'package:shipper_app/screens/PostLoadScreens/PostLoadScreenLoadDetails.dart';
 import 'package:shipper_app/variables/truckFilterVariablesForPostLoad.dart';
@@ -23,6 +24,8 @@ class TruckTypePostLoadDetailsScreen extends StatefulWidget {
 class _TruckTypePostLoadDetailsScreenState
     extends State<TruckTypePostLoadDetailsScreen> {
   //always check variable truckName, truckImage, loadWeightTons, truckTypeDescription while inserting, deleting or updating any truck
+
+  HomeWebController homeWebController = Get.put(HomeWebController());
 
   List<String> truckName = [
     'Open Body',
@@ -104,11 +107,8 @@ class _TruckTypePostLoadDetailsScreenState
               title: 'Choose a Truck Type',
               subTitle: 'What type of truck you require?',
               previousScreen: (kIsWeb)
-                  ? HomeScreenWeb(
-                      index: screens.indexOf(postLoadScreenTwo),
-                      selectedIndex: screens.indexOf(postLoadScreen),
-                    )
-                  : PostLoadScreenTwo()),
+                  ? const PostLoadScreenTwo()
+                  : const PostLoadScreenTwo()),
           Container(
             height: 10,
             color: lineDividerColor,
@@ -221,21 +221,13 @@ class _TruckTypePostLoadDetailsScreenState
                   }
 
                   if (kIsWeb) {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => HomeScreenWeb(
-                                  visibleWidget: LoadTruckWeightSelectScreenWeb(
-                                    truckTypeName: truckName[index],
-                                    minWeight: loadWeightTons[index][0],
-                                    maxWeight: loadWeightTons[index][1],
-                                    truckTypeValue: truckFilterVariables
-                                        .truckTypeValueList[index],
-                                  ),
-                                  index: 1000,
-                                  selectedIndex:
-                                      screens.indexOf(postLoadScreen),
-                                )));
+                    homeWebController.changeVisibleWidget(LoadTruckWeightSelectScreenWeb(
+                      truckTypeName: truckName[index],
+                      minWeight: loadWeightTons[index][0],
+                      maxWeight: loadWeightTons[index][1],
+                      truckTypeValue: truckFilterVariables
+                          .truckTypeValueList[index],
+                    ));
                   } else {
                     Get.to(() => LoadTruckWeightSelectScreenWeb(
                           truckTypeName: truckName[index],

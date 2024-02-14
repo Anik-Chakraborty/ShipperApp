@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shipper_app/Web/screens/home_web.dart';
 import 'package:shipper_app/constants/screens.dart';
@@ -38,26 +37,14 @@ class ApplyButton extends StatelessWidget {
                 child: Text(
                   'apply'.tr,
                   // AppLocalizations.of(context)!.apply,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: white,
                   ),
                 ),
                 onPressed: () {
-                  print(providerData.totalTyresValue.toString());
-                  print(providerData.passingWeightValue.toString());
-                  print(providerData.productType.toString());
-                  print(providerData.truckTypeValue.toString());
-                  print(providerData.price.toString());
-                  print(providerData.truckNumber.toString());
                   if (providerData.postLoadScreenTwoButton()) {
                     Get.to(() => LoadConfirmation(
-                          previousScreen: (kIsWeb)
-                              ? HomeScreenWeb(
-                                  index: screens.indexOf(postLoadScreenTwo),
-                                  selectedIndex:
-                                      screens.indexOf(postLoadScreen),
-                                )
-                              : PostLoadScreenTwo(),
+                          previousScreen: const PostLoadScreenTwo(),
                         ));
                   } else {
                     return null;

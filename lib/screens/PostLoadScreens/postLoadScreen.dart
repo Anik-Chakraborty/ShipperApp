@@ -43,6 +43,7 @@ class _PostLoadScreenState extends State<PostLoadScreen> with TickerProviderStat
     ProviderData providerData = Provider.of<ProviderData>(context);
     pageController =
         PageController(initialPage: providerData.upperNavigatorIndex);
+    tabController.animateTo(providerData.upperNavigatorIndex);
     return Scaffold(
       backgroundColor: headerLightBlueColor,
       floatingActionButton: (kIsWeb &&
@@ -50,10 +51,7 @@ class _PostLoadScreenState extends State<PostLoadScreen> with TickerProviderStat
           ? null
           : PostButtonLoad(
               previousScreen: (kIsWeb)
-                  ? HomeScreenWeb(
-                      index: screens.indexOf(postLoadScreen),
-                      selectedIndex: screens.indexOf(postLoadScreen),
-                    )
+                  ? const PostLoadScreen()
                   : NavigationScreen()),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: SafeArea(
@@ -91,11 +89,7 @@ class _PostLoadScreenState extends State<PostLoadScreen> with TickerProviderStat
                                 Responsive.isMobile(context) ? false : true,
                             child: PostButtonLoad(
                                 previousScreen: (kIsWeb)
-                                    ? HomeScreenWeb(
-                                        index: screens.indexOf(postLoadScreen),
-                                        selectedIndex:
-                                            screens.indexOf(postLoadScreen),
-                                      )
+                                    ? const PostLoadScreen()
                                     : NavigationScreen()),
                           ),
                         ),

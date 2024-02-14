@@ -1,12 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:shipper_app/Web/screens/home_web.dart';
 import 'package:shipper_app/constants/screens.dart';
+import 'package:shipper_app/controller/homeWebController.dart';
 import 'package:shipper_app/providerClass/providerData.dart';
 import 'package:shipper_app/screens/PostLoadScreens/TruckTypePostLoadDetailsScreen.dart';
+import 'package:shipper_app/screens/PostLoadScreens/postLoadScreen.dart';
 import 'package:shipper_app/variables/truckFilterVariablesForPostLoad.dart';
 import 'package:shipper_app/constants/colors.dart';
 import 'package:shipper_app/constants/fontSize.dart';
@@ -35,6 +35,8 @@ class _TruckTypeWebWidgetState extends State<TruckTypeWebWidget> {
   TruckFilterVariablesForPostLoad truckFilterVariables =
       TruckFilterVariablesForPostLoad();
 
+  HomeWebController homeWebController = Get.put(HomeWebController());
+
   @override
   Widget build(BuildContext context) {
     txtTruckTypeController.clear();
@@ -51,7 +53,6 @@ class _TruckTypeWebWidgetState extends State<TruckTypeWebWidget> {
     if (providerData.truckTypeValue != '' &&
         providerData.truckTypeValue != null &&
         loadWeight != '') {
-      print(providerData.truckTypeValue);
       txtTruckTypeController.text =
           '${truckName[truckFilterVariables.truckTypeValueList.indexOf(providerData.truckTypeValue)]} ; $loadWeight tons';
     }
@@ -65,13 +66,9 @@ class _TruckTypeWebWidgetState extends State<TruckTypeWebWidget> {
         showCursor: false,
         mouseCursor: SystemMouseCursors.click,
         onTap: () {
-          Get.to(() => (kIsWeb)
-              ? HomeScreenWeb(
-                  visibleWidget: TruckTypePostLoadDetailsScreen(),
-                  index: 1000,
-                  selectedIndex: screens.indexOf(postLoadScreen),
-                )
-              : TruckTypePostLoadDetailsScreen());
+          (kIsWeb) ?
+          homeWebController.changeVisibleWidgetWithSideBarSelectedIndex(TruckTypePostLoadDetailsScreen(),screens.indexOf(postLoadScreen)) :
+          Get.to(() => TruckTypePostLoadDetailsScreen());
         },
         decoration: InputDecoration(
             border: OutlineInputBorder(

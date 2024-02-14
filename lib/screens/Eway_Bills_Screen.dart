@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ import 'package:shipper_app/Widgets/EwayBill_Table_Header.dart';
 import 'package:shipper_app/constants/colors.dart';
 import 'package:shipper_app/constants/fontWeights.dart';
 import 'package:shipper_app/constants/screens.dart';
+import 'package:shipper_app/controller/homeWebController.dart';
 import 'package:shipper_app/functions/eway_bill_api.dart';
 import 'package:shipper_app/functions/googleDirectionsApi.dart';
 import 'package:shipper_app/functions/ongoingTrackUtils/FastTag.dart';
@@ -29,6 +31,9 @@ class EwayBills extends StatefulWidget {
 }
 
 class _EwayBillsState extends State<EwayBills> {
+
+  HomeWebController homeWebController = Get.put(HomeWebController());
+
   String search = '';
   String selectedRange = '3 days';
   List<Map<String, dynamic>> EwayBills = [];
@@ -328,17 +333,8 @@ class _EwayBillsState extends State<EwayBills> {
                     cursor: SystemMouseCursors.click,
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => HomeScreenWeb(
-                                    visibleWidget: TrackAllFastagScreen(
-                                        EwayData: EwayBills),
-                                    index: 1000,
-                                    selectedIndex:
-                                        screens.indexOf(ewayBillScreen),
-                                  )),
-                        );
+                        homeWebController.changeVisibleWidgetWithSideBarSelectedIndex(TrackAllFastagScreen(
+                            EwayData: EwayBills), screens.indexOf(ewayBillScreen));
                       },
                       child: Container(
                         height: 55,
@@ -431,18 +427,8 @@ class _EwayBillsState extends State<EwayBills> {
 
                               return InkWell(
                                 onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => HomeScreenWeb(
-                                              visibleWidget:
-                                                  EwayBillDetailScreen(
-                                                      ewayBillData: ewayBill),
-                                              index: 1000,
-                                              selectedIndex: screens
-                                                  .indexOf(ewayBillScreen),
-                                            )),
-                                  );
+                                  homeWebController.changeVisibleWidgetWithSideBarSelectedIndex(EwayBillDetailScreen(ewayBillData: ewayBill), screens
+                                      .indexOf(ewayBillScreen));
                                 },
                                 child: ewayBillData(
                                     transporterName: transporterName,
@@ -573,20 +559,12 @@ class _EwayBillsState extends State<EwayBills> {
               child: Center(
                   child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => HomeScreenWeb(
-                                    visibleWidget: MapScreen(
-                                      loadingPoint: from,
-                                      unloadingPoint: to,
-                                      truckNumber: vehicleNo,
-                                    ),
-                                    index: 1000,
-                                    selectedIndex:
-                                        screens.indexOf(ewayBillScreen),
-                                  )),
-                        );
+                        homeWebController.changeVisibleWidgetWithSideBarSelectedIndex(MapScreen(
+                          loadingPoint: from,
+                          unloadingPoint: to,
+                          truckNumber: vehicleNo,
+                        ), screens
+                            .indexOf(ewayBillScreen));
                       },
                       style: ButtonStyle(
                           fixedSize: MaterialStateProperty.all<Size>(

@@ -2,19 +2,20 @@ import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shipper_app/Web/screens/home_web.dart';
 import 'package:shipper_app/Widgets/buttons/editDriverDetail.dart';
 import 'package:shipper_app/Widgets/buttons/sendConsentButton.dart';
 import 'package:shipper_app/Widgets/buttons/trackButton.dart';
 import 'package:shipper_app/Widgets/showSnackBarTop.dart';
 import 'package:shipper_app/constants/screens.dart';
 import 'package:shipper_app/controller/LrPdfGenerator.dart';
+import 'package:shipper_app/controller/homeWebController.dart';
 import 'package:shipper_app/functions/loadOnGoingData.dart';
 import 'package:shipper_app/functions/operatorInfo.dart';
 import 'package:shipper_app/functions/truckApis/consentStatusApi.dart';
 import 'package:shipper_app/models/onGoingCardModel.dart';
 import 'package:shipper_app/responsive.dart';
 import 'package:shipper_app/screens/FastTagScreen.dart';
+import 'package:shipper_app/screens/PostLoadScreens/postLoadScreen.dart';
 import 'package:shipper_app/screens/vehicleDetailsScreen.dart';
 import '/constants/colors.dart';
 import '/constants/fontSize.dart';
@@ -81,6 +82,9 @@ class documentUploadScreen extends StatefulWidget {
 
 class _documentUploadScreenState extends State<documentUploadScreen>
     with TickerProviderStateMixin {
+
+  HomeWebController homeWebController = Get.put(HomeWebController());
+
   bool progressBar = false;
 
   String status = 'Pending'; // Default status
@@ -487,7 +491,12 @@ class _documentUploadScreenState extends State<documentUploadScreen>
                                       padding: const EdgeInsets.only(left: 20),
                                       child: GestureDetector(
                                         onTap: () {
-                                          // Get.back();
+                                          if(kIsWeb){
+                                            homeWebController.changeVisibleWidget(const PostLoadScreen());
+                                          }
+                                          else{
+                                             Get.back();
+                                          }
                                           setState(() {
                                             providerData.LrPhotoFile = null;
                                             providerData.LrPhoto64 = null;
@@ -635,7 +644,12 @@ class _documentUploadScreenState extends State<documentUploadScreen>
                                               const EdgeInsets.only(left: 20),
                                           child: GestureDetector(
                                             onTap: () {
-                                              // Get.back();
+                                              if(kIsWeb){
+                                                homeWebController.changeVisibleWidget(const PostLoadScreen());
+                                              }
+                                              else{
+                                                Get.back();
+                                              }
                                               setState(() {
                                                 providerData.LrPhotoFile = null;
                                                 providerData.LrPhoto64 = null;
@@ -965,7 +979,12 @@ class _documentUploadScreenState extends State<documentUploadScreen>
                                                           left: 20),
                                                   child: GestureDetector(
                                                     onTap: () {
-                                                      // Get.back();
+                                                      if(kIsWeb){
+                                                        homeWebController.changeVisibleWidget(const PostLoadScreen());
+                                                      }
+                                                      else{
+                                                        Get.back();
+                                                      }
                                                       setState(() {
                                                         providerData
                                                             .LrPhotoFile = null;
@@ -1163,7 +1182,12 @@ class _documentUploadScreenState extends State<documentUploadScreen>
                                                           left: 15),
                                                   child: GestureDetector(
                                                     onTap: () {
-                                                      Get.back();
+                                                      if(kIsWeb){
+                                                        homeWebController.changeVisibleWidget(const PostLoadScreen());
+                                                      }
+                                                      else{
+                                                        Get.back();
+                                                      }
                                                       providerData.LrPhotoFile =
                                                           null;
                                                       providerData.LrPhoto64 =
@@ -1570,21 +1594,14 @@ class _documentUploadScreenState extends State<documentUploadScreen>
                                                             MaterialPageRoute(
                                                                 builder:
                                                                     (context) =>
-                                                                        HomeScreenWeb(
-                                                                          visibleWidget:
-                                                                              MapScreen(
-                                                                            loadingPoint:
-                                                                                widget.loadingPoint,
-                                                                            unloadingPoint:
-                                                                                widget.unloadingPoint,
-                                                                            truckNumber:
-                                                                                widget.truckNo,
-                                                                          ),
-                                                                          index:
-                                                                              1000,
-                                                                          selectedIndex:
-                                                                              screens.indexOf(postLoadScreen),
-                                                                        )),
+                                                                    homeWebController.changeVisibleWidgetWithSideBarSelectedIndex(MapScreen(
+                                                                      loadingPoint:
+                                                                      widget.loadingPoint,
+                                                                      unloadingPoint:
+                                                                      widget.unloadingPoint,
+                                                                      truckNumber:
+                                                                      widget.truckNo,
+                                                                    ),screens.indexOf(postLoadScreen))),
                                                           );
                                                         },
                                                         child: Container(
@@ -1693,21 +1710,15 @@ class _documentUploadScreenState extends State<documentUploadScreen>
                                                             MaterialPageRoute(
                                                                 builder:
                                                                     (context) =>
-                                                                        HomeScreenWeb(
-                                                                          visibleWidget:
-                                                                              MapScreen(
-                                                                            loadingPoint:
-                                                                                widget.loadingPoint,
-                                                                            unloadingPoint:
-                                                                                widget.unloadingPoint,
-                                                                            truckNumber:
-                                                                                widget.truckNo,
-                                                                          ),
-                                                                          index:
-                                                                              1000,
-                                                                          selectedIndex:
-                                                                              screens.indexOf(postLoadScreen),
-                                                                        )),
+                                                                    homeWebController.changeVisibleWidgetWithSideBarSelectedIndex(MapScreen(
+                                                                      loadingPoint:
+                                                                      widget.loadingPoint,
+                                                                      unloadingPoint:
+                                                                      widget.unloadingPoint,
+                                                                      truckNumber:
+                                                                      widget.truckNo,
+                                                                    ), screens.indexOf(postLoadScreen)),
+                                                                       ),
                                                           );
                                                         },
                                                         child: Container(
@@ -2071,16 +2082,11 @@ class _documentUploadScreenState extends State<documentUploadScreen>
                                                               MaterialPageRoute(
                                                                   builder:
                                                                       (context) =>
-                                                                          HomeScreenWeb(
-                                                                            visibleWidget:
-                                                                                VehicleDetailsScreen(
-                                                                              truckNumber: widget.truckNo,
-                                                                            ),
-                                                                            index:
-                                                                                1000,
-                                                                            selectedIndex:
-                                                                                screens.indexOf(postLoadScreen),
-                                                                          )),
+                                                                          homeWebController.changeVisibleWidgetWithSideBarSelectedIndex(VehicleDetailsScreen(
+                                                                            truckNumber: widget.truckNo,
+                                                                          ), screens.indexOf(postLoadScreen))
+
+                                                              ),
                                                             );
                                                           },
                                                           style: ButtonStyle(

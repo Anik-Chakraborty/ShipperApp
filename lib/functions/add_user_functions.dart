@@ -6,10 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:shipper_app/Web/screens/home_web.dart';
+import 'package:shipper_app/constants/screens.dart';
+import 'package:shipper_app/controller/homeWebController.dart';
+import 'package:shipper_app/screens/employee_list_with_roles_screen.dart';
 import '../Widgets/alertDialog/CompletedDialog.dart';
 import '../Widgets/alertDialog/orderFailedAlertDialog.dart';
-import '../constants/screens.dart';
 import '../controller/navigationIndexController.dart';
 import '../screens/navigationScreen.dart';
 import '/functions/alert_dialog.dart';
@@ -20,6 +21,8 @@ class AddUserFunctions {
   DatabaseReference ref = FirebaseDatabase.instance.ref();
   NavigationIndexController navigationIndexController =
       Get.put(NavigationIndexController());
+
+  HomeWebController homeWebController = Get.put(HomeWebController());
 
   //TODO: The functions getUserByMail and getUserByPhone are used to get the uid of the required employee for adding him to the database.
   //TODO: These functions are called respectively whether employer given mailId or phone number of an employee.
@@ -88,24 +91,19 @@ class AddUserFunctions {
       );
       Timer(
         const Duration(seconds: 3),
-        () => {
-          kIsWeb
-              ? Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomeScreenWeb(
-                      index: screens.indexOf(employeeListScreen),
-                      selectedIndex: screens.indexOf(employeeListScreen),
-                    ),
-                  ),
-                )
-              : Get.offAll(() => NavigationScreen()),
-          navigationIndexController.updateIndex(2),
+        () {
+          if (kIsWeb){
+            homeWebController.changeVisibleWidgetWithSideBarSelectedIndex(const EmployeeListRolesScreen(), screens.indexOf(employeeListScreen));
+          }
+          else {
+            Get.offAll(() => NavigationScreen());
+          }
+          navigationIndexController.updateIndex(2);
         },
       );
     }
     }catch(e){
-      print("Error while updating employee: $e");
+      debugPrint("Error while updating employee: $e");
     }
   }
 
@@ -206,19 +204,14 @@ class AddUserFunctions {
         );
         Timer(
           const Duration(seconds: 3),
-          () => {
-            kIsWeb
-                ? Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => HomeScreenWeb(
-                        index: screens.indexOf(employeeListScreen),
-                        selectedIndex: screens.indexOf(employeeListScreen),
-                      ),
-                    ),
-                  )
-                : Get.offAll(() => NavigationScreen()),
-            navigationIndexController.updateIndex(2),
+          () {
+            if(kIsWeb){
+              homeWebController.changeVisibleWidget(const EmployeeListRolesScreen());
+            }
+            else{
+              Get.offAll(() => NavigationScreen());
+              navigationIndexController.updateIndex(2);
+            }
           },
         );
       }).catchError((error) {

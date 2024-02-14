@@ -1,24 +1,18 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shipper_app/Web/screens/home_web.dart';
 import 'package:shipper_app/constants/screens.dart';
+import 'package:shipper_app/controller/homeWebController.dart';
 import 'package:shipper_app/responsive.dart';
 import 'package:shipper_app/screens/biddingTransporterDetails.dart';
 import '/constants/colors.dart';
 import '/constants/fontSize.dart';
 import '/constants/fontWeights.dart';
 import '/constants/spaces.dart';
-import '/controller/isOtpInvalidController.dart';
 import '/screens/myLoadPages/biddingDetails.dart';
 import '/widgets/buttons/acceptButton.dart';
 import '/widgets/buttons/callButton.dart';
 import '/widgets/buttons/negotiateButton.dart';
-import '/widgets/loadLabelValueRowTemplate.dart';
 import '/widgets/newRowTemplate.dart';
-import '/widgets/priceContainer.dart';
-
 import 'LoadEndPointTemplate.dart';
 import 'linePainter.dart';
 
@@ -62,6 +56,8 @@ class BiddingsCardShipperSide extends StatelessWidget {
     required this.transporterApproved,
     required this.transporterEmail,
   });
+
+  HomeWebController homeWebController = Get.put(HomeWebController());
 
   @override
   Widget build(BuildContext context) {
@@ -109,54 +105,33 @@ class BiddingsCardShipperSide extends StatelessWidget {
                       child: (Text(biddingDate ?? 'NA',
                           style: textStyle, textAlign: TextAlign.center)),
                     )),
-                VerticalDivider(color: transparent, thickness: 1),
+                const VerticalDivider(color: transparent, thickness: 1),
                 Expanded(
                     flex: 4,
                     child: Center(
                       child: InkWell(
                           onTap: () {
-                            ((kIsWeb)
-                                ? Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => HomeScreenWeb(
-                                              visibleWidget:
-                                                  biddingTrasnporterDetails(
-                                                loadId: loadId,
-                                                loadingPointCity:
-                                                    loadingPointCity,
-                                                unloadingPointCity:
-                                                    unloadingPointCity,
-                                                transporterName:
-                                                    transporterName,
-                                                transporterPhoneNo:
-                                                    transporterPhoneNum,
-                                                transporterCompanyName:
-                                                    companyName,
-                                                transporterEmail:
-                                                    transporterEmail,
-                                              ),
-                                              index: 1000,
-                                              selectedIndex: screens
-                                                  .indexOf(postLoadScreen),
-                                            )))
-                                : Get.to(() => HomeScreenWeb(
-                                        visibleWidget:
-                                            biddingTrasnporterDetails(
-                                      loadId: loadId,
-                                      loadingPointCity: loadingPointCity,
-                                      unloadingPointCity: unloadingPointCity,
-                                      transporterName: transporterName,
-                                      transporterPhoneNo: transporterPhoneNum,
-                                      transporterCompanyName: companyName,
-                                      transporterEmail: transporterEmail,
-                                    ))));
+                            homeWebController.changeVisibleWidgetWithSideBarSelectedIndex(biddingTrasnporterDetails(
+                              loadId: loadId,
+                              loadingPointCity:
+                              loadingPointCity,
+                              unloadingPointCity:
+                              unloadingPointCity,
+                              transporterName:
+                              transporterName,
+                              transporterPhoneNo:
+                              transporterPhoneNum,
+                              transporterCompanyName:
+                              companyName,
+                              transporterEmail:
+                              transporterEmail,
+                            ), screens.indexOf(postLoadScreen));
                           },
                           mouseCursor: SystemMouseCursors.click,
                           child: (Text(companyName ?? 'NA',
                               style: textStyle, textAlign: TextAlign.center))),
                     )),
-                VerticalDivider(color: transparent, thickness: 1),
+                const VerticalDivider(color: transparent, thickness: 1),
                 Expanded(
                     flex: 4,
                     child: Center(
@@ -238,7 +213,7 @@ class BiddingsCardShipperSide extends StatelessWidget {
                                     style: TextStyle(
                                         fontSize: size_6, color: veryDarkGrey),
                                   ),
-                                  Icon(
+                                  const Icon(
                                     Icons.arrow_forward_ios_sharp,
                                     size: 14,
                                   ),

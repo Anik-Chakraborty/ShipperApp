@@ -2,11 +2,12 @@ import 'dart:async';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:screenshot/screenshot.dart';
 import 'package:shipper_app/Web/screens/home_web.dart';
 import 'package:shipper_app/Widgets/buttons/repostButton.dart';
 import 'package:shipper_app/Widgets/postLoadLocationWidgets/PostLoadMultipleLocationWidget.dart';
 import 'package:shipper_app/constants/screens.dart';
+import 'package:shipper_app/controller/homeWebController.dart';
+import 'package:shipper_app/screens/PostLoadScreens/postLoadScreen.dart';
 import 'package:sizer/sizer.dart';
 import '../responsive.dart';
 import '/constants/colors.dart';
@@ -18,8 +19,6 @@ import '/controller/navigationIndexController.dart';
 import '/models/loadDetailsScreenModel.dart';
 import '/models/popupModelForMyLoads.dart';
 import '/providerClass/providerData.dart';
-
-// import '/screens/PostLoadScreens/PostLoadScreenLoacationDetails.dart';
 import '/screens/navigationScreen.dart';
 import '/variables/truckFilterVariables.dart';
 import '/widgets/LoadEndPointTemplate.dart';
@@ -34,6 +33,8 @@ import '/screens/PostLoadScreens/postloadnavigation.dart';
 // ignore: must_be_immutable
 class MyLoadsCard extends StatelessWidget {
   LoadDetailsScreenModel loadDetailsScreenModel;
+
+  HomeWebController homeWebController = Get.put(HomeWebController());
 
   MyLoadsCard({
     super.key,
@@ -255,7 +256,7 @@ class MyLoadsCard extends StatelessWidget {
                                 filterQuality: FilterQuality.high,
                                 alignment: Alignment.center,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 10,
                               ),
                               Tooltip(
@@ -279,9 +280,9 @@ class MyLoadsCard extends StatelessWidget {
                           ),
                           (loadDetailsScreenModel.unloadingPointCity2 != 'NA')
                               ? Container(
-                                  padding: EdgeInsets.only(left: 5),
+                                  padding: const EdgeInsets.only(left: 5),
                                   height: 15,
-                                  child: DottedLine(
+                                  child: const DottedLine(
                                     alignment: WrapAlignment.center,
                                     direction: Axis.vertical,
                                     dashColor: kLiveasyColor,
@@ -299,7 +300,7 @@ class MyLoadsCard extends StatelessWidget {
                               ? Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Image(
+                                    const Image(
                                       image: AssetImage(
                                           'assets/icons/red_circle.png'),
                                       height: 10,
@@ -308,7 +309,7 @@ class MyLoadsCard extends StatelessWidget {
                                       filterQuality: FilterQuality.high,
                                       alignment: Alignment.center,
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 10,
                                     ),
                                     Tooltip(
@@ -331,14 +332,14 @@ class MyLoadsCard extends StatelessWidget {
                                     )
                                   ],
                                 )
-                              : SizedBox(
+                              : const SizedBox(
                                   height: 0,
                                 )
                         ],
                       ),
                     ),
                   )),
-              VerticalDivider(color: Colors.grey, thickness: 1),
+              const VerticalDivider(color: Colors.grey, thickness: 1),
               Expanded(
                   flex: 4,
                   child: Center(
@@ -357,7 +358,7 @@ class MyLoadsCard extends StatelessWidget {
                                 fontSize: textFontSize,
                                 fontFamily: 'Montserrat'),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 5,
                           ),
                           Text(
@@ -372,7 +373,7 @@ class MyLoadsCard extends StatelessWidget {
                           )
                         ]),
                   ))),
-              VerticalDivider(color: Colors.grey, thickness: 1),
+              const VerticalDivider(color: Colors.grey, thickness: 1),
               Expanded(
                   flex: 4,
                   child: Center(
@@ -390,7 +391,7 @@ class MyLoadsCard extends StatelessWidget {
                                 fontSize: textFontSize,
                                 fontFamily: 'Montserrat'),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 5,
                           ),
                           Text(
@@ -404,7 +405,7 @@ class MyLoadsCard extends StatelessWidget {
                           )
                         ]),
                   ))),
-              VerticalDivider(color: Colors.grey, thickness: 1),
+              const VerticalDivider(color: Colors.grey, thickness: 1),
               Expanded(
                 flex: 3,
                 child: Center(
@@ -653,18 +654,20 @@ class MyLoadsCard extends StatelessWidget {
         providerData.updateResetActive(true);
         providerData.updateEditLoad(true, loadDetailsScreenModel.loadId!);
 
-        print(providerData.editLoad); // true
-        Get.to(PostLoadNav(
-          setChild: postLoadMultipleLocationWidget(
-              context,
-              (kIsWeb)
-                  ? HomeScreenWeb(
-                      index: screens.indexOf(postLoadScreen),
-                      selectedIndex: screens.indexOf(postLoadScreen),
-                    )
-                  : NavigationScreen()),
-          index: 0,
-        ));
+        if (kIsWeb) {
+          homeWebController.changeVisibleWidget(PostLoadNav(
+              setChild: postLoadMultipleLocationWidget(
+                  context,
+                 const PostLoadScreen()),
+              index: 0),);
+        } else {
+          Get.to(() => PostLoadNav(
+                setChild: postLoadMultipleLocationWidget(
+                    context, NavigationScreen()),
+                index: 0,
+              ));
+        }
+
         break;
       case MenuItems.itemDisable:
         LoadApiCalls loadApiCalls = LoadApiCalls();

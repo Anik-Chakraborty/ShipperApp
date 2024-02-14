@@ -1,8 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shipper_app/Web/screens/home_web.dart';
-import 'package:shipper_app/constants/screens.dart';
+import 'package:shipper_app/controller/homeWebController.dart';
 
 class BackButtonWidget extends StatelessWidget {
   var previousPage;
@@ -10,21 +9,15 @@ class BackButtonWidget extends StatelessWidget {
 
   BackButtonWidget({super.key, this.previousPage, this.selectedIndex});
 
+  HomeWebController homeWebController = Get.put(HomeWebController());
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         if (previousPage != null) {
           if (kIsWeb) {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => HomeScreenWeb(
-                    visibleWidget: previousPage,
-                    selectedIndex: selectedIndex ?? 0,
-                    index: 1000,
-                  ),
-                ));
+            homeWebController.changeVisibleWidgetWithSideBarSelectedIndex(previousPage, selectedIndex ?? 0);
           }else { 
             Navigator.pushReplacement(  
               context, 
@@ -36,7 +29,7 @@ class BackButtonWidget extends StatelessWidget {
           Get.back();
         }
       },
-      child: Icon(Icons.arrow_back_ios_rounded),
+      child: const Icon(Icons.arrow_back_ios_rounded),
     );
   }
 }

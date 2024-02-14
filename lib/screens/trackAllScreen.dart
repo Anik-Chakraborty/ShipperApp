@@ -4,6 +4,7 @@ import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:shipper_app/Widgets/custom_Info_Window.dart';
 import 'package:shipper_app/constants/colors.dart';
+import 'package:shipper_app/controller/homeWebController.dart';
 import 'package:shipper_app/functions/bookingApiCalls.dart';
 import 'package:shipper_app/functions/durationToDateTime.dart';
 import 'package:shipper_app/functions/googleDirectionsApi.dart';
@@ -19,6 +21,7 @@ import 'package:shipper_app/functions/mapUtils/getLoactionUsingImei.dart';
 import 'package:shipper_app/functions/ongoingTrackUtils/FastTag.dart';
 import 'package:shipper_app/functions/trackScreenFunctions.dart';
 import 'package:shipper_app/models/BookingModel.dart';
+import 'package:shipper_app/screens/PostLoadScreens/postLoadScreen.dart';
 import 'package:shipper_app/screens/tryAgainScreen.dart';
 
 class TrackAllScreen extends StatefulWidget {
@@ -29,7 +32,10 @@ class TrackAllScreen extends StatefulWidget {
 }
 
 class _TrackAllScreenState extends State<TrackAllScreen> {
-  GlobalKey _mapKey = GlobalKey();
+
+  HomeWebController homeWebController = Get.put(HomeWebController());
+
+  final GlobalKey _mapKey = GlobalKey();
   OverlayEntry? _overlayEntry;
   final double customInfoWindowWidth = 200; // Adjust as needed
   final double customInfoWindowHeight = 100; // Adjust as needed
@@ -584,7 +590,12 @@ void dispose() {
                 children: [
                   IconButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      if(kIsWeb){
+                        homeWebController.changeVisibleWidget(const PostLoadScreen());
+                      }
+                      else{
+                        Navigator.pop(context);
+                      }
                     },
                     icon: const Icon(Icons.arrow_back_ios_new,
                         color: darkBlueColor),

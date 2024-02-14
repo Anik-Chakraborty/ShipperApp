@@ -1,14 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:shipper_app/Web/screens/home_web.dart';
 import 'package:shipper_app/Widgets/loadDetailsWebWidgets/loadDetailsHeader.dart';
 import 'package:shipper_app/constants/colors.dart';
 import 'package:shipper_app/constants/fontSize.dart';
 import 'package:shipper_app/constants/screens.dart';
-
+import 'package:shipper_app/controller/homeWebController.dart';
 import 'package:shipper_app/providerClass/providerData.dart';
 import 'package:shipper_app/responsive.dart';
 import 'package:shipper_app/screens/PostLoadScreens/PostLoadScreenLoadDetails.dart';
@@ -20,6 +18,8 @@ class ProductTypeSelection extends StatefulWidget {
 
 class _ProductTypeSelectionState extends State<ProductTypeSelection> {
   TextEditingController txtProductTypeController = TextEditingController();
+
+  HomeWebController homeWebController = Get.put(HomeWebController());
 
   List<String> productType = [
     'Agriculture and Food',
@@ -57,18 +57,15 @@ class _ProductTypeSelectionState extends State<ProductTypeSelection> {
               title: 'Select Product Type',
               subTitle: 'We need some details from you.',
               previousScreen: (kIsWeb)
-                  ? HomeScreenWeb(
-                      index: screens.indexOf(postLoadScreenTwo),
-                      selectedIndex: screens.indexOf(postLoadScreen),
-                    )
-                  : PostLoadScreenTwo()),
+                  ? const PostLoadScreenTwo()
+                  : const PostLoadScreenTwo()),
           Container(
             height: 10,
             color: lineDividerColor,
           ),
           Container(
             color: white,
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: Text(
               'Recent',
               style: TextStyle(
@@ -79,7 +76,7 @@ class _ProductTypeSelectionState extends State<ProductTypeSelection> {
           ),
           Container(
             color: white,
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             height: 100,
             child: Center(
               child: Text(
@@ -93,7 +90,7 @@ class _ProductTypeSelectionState extends State<ProductTypeSelection> {
           ),
           Container(
             color: white,
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: Text(
               'Recommended',
               style: TextStyle(
@@ -128,7 +125,7 @@ class _ProductTypeSelectionState extends State<ProductTypeSelection> {
                             context: context,
                             builder: (context) {
                               return AlertDialog(
-                                  contentPadding: EdgeInsets.only(
+                                  contentPadding: const EdgeInsets.only(
                                       left: 20, right: 20, top: 40, bottom: 40),
                                   content: Column(
                                     mainAxisSize: MainAxisSize.min,
@@ -144,7 +141,7 @@ class _ProductTypeSelectionState extends State<ProductTypeSelection> {
                                             fontSize: size_10,
                                             fontFamily: 'Montserrat'),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 20,
                                       ),
                                       TextField(
@@ -173,7 +170,7 @@ class _ProductTypeSelectionState extends State<ProductTypeSelection> {
                                                     color: truckGreen,
                                                     width: 1.5))),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 20,
                                       ),
                                       Row(
@@ -196,15 +193,9 @@ class _ProductTypeSelectionState extends State<ProductTypeSelection> {
                                                 });
                                               }
                                             },
-                                            child: Text(
-                                              'Ok',
-                                              style: TextStyle(
-                                                  fontFamily: 'Montserrat',
-                                                  color: Colors.white),
-                                            ),
                                             style: ButtonStyle(
                                                 mouseCursor:
-                                                    MaterialStatePropertyAll(
+                                                    const MaterialStatePropertyAll(
                                                         SystemMouseCursors
                                                             .click),
                                                 shape: MaterialStatePropertyAll(
@@ -214,11 +205,11 @@ class _ProductTypeSelectionState extends State<ProductTypeSelection> {
                                                           width: 2,
                                                         ),
                                                         borderRadius:
-                                                            BorderRadius.all(
+                                                            const BorderRadius.all(
                                                                 Radius.circular(
                                                                     5)))),
                                                 padding:
-                                                    MaterialStatePropertyAll(
+                                                    const MaterialStatePropertyAll(
                                                         EdgeInsets.only(
                                                             left: 10,
                                                             right: 10,
@@ -227,21 +218,21 @@ class _ProductTypeSelectionState extends State<ProductTypeSelection> {
                                                 backgroundColor:
                                                     MaterialStatePropertyAll(
                                                         truckGreen)),
+                                            child: const Text(
+                                              'Ok',
+                                              style: TextStyle(
+                                                  fontFamily: 'Montserrat',
+                                                  color: Colors.white),
+                                            ),
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             width: 10,
                                           ),
                                           OutlinedButton(
                                               onPressed: () {
                                                 Navigator.of(context).pop();
                                               },
-                                              child: Text(
-                                                'Cancel',
-                                                style: TextStyle(
-                                                    fontFamily: 'Montserrat',
-                                                    color: Colors.white),
-                                              ),
-                                              style: ButtonStyle(
+                                              style: const ButtonStyle(
                                                 backgroundColor:
                                                     MaterialStatePropertyAll(
                                                         red),
@@ -266,6 +257,12 @@ class _ProductTypeSelectionState extends State<ProductTypeSelection> {
                                                             right: 10,
                                                             top: 5,
                                                             bottom: 8)),
+                                              ),
+                                              child: const Text(
+                                                'Cancel',
+                                                style: TextStyle(
+                                                    fontFamily: 'Montserrat',
+                                                    color: Colors.white),
                                               )),
                                         ],
                                       )
@@ -280,9 +277,9 @@ class _ProductTypeSelectionState extends State<ProductTypeSelection> {
                           gradient: (providerData.productType != null &&
                                   providerData.productType ==
                                       productType[index])
-                              ? LinearGradient(
+                              ? const LinearGradient(
                                   colors: [gradientGreyColor, white])
-                              : LinearGradient(colors: [Colors.white, white]),
+                              : const LinearGradient(colors: [Colors.white, white]),
                         ),
                         padding: EdgeInsets.only(
                             left: (Responsive.isTablet(context)) ? 20 : 40,
@@ -323,17 +320,17 @@ class _ProductTypeSelectionState extends State<ProductTypeSelection> {
                     ),
                     ((productType.length % 2) == 0)
                         ? ((productType.length - 2) > index)
-                            ? Divider(
+                            ? const Divider(
                                 thickness: 1,
                                 height: 0,
                               )
-                            : SizedBox()
+                            : const SizedBox()
                         : ((productType.length - 1) != index)
-                            ? Divider(
+                            ? const Divider(
                                 thickness: 1,
                                 height: 0,
                               )
-                            : SizedBox()
+                            : const SizedBox()
                   ],
                 );
               },

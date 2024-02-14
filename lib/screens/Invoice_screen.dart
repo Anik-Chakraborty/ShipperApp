@@ -10,6 +10,7 @@ import 'package:shipper_app/Widgets/invoice_header.dart';
 import 'package:shipper_app/constants/colors.dart';
 import 'package:shipper_app/constants/fontWeights.dart';
 import 'package:shipper_app/constants/screens.dart';
+import 'package:shipper_app/controller/homeWebController.dart';
 import 'package:shipper_app/controller/shipperIdController.dart';
 import 'package:shipper_app/functions/fetch_invoice_data.dart';
 import 'package:shipper_app/screens/invoice_trip.dart';
@@ -22,6 +23,9 @@ class InvoiceScreen extends StatefulWidget {
 }
 
 class _InvoiceScreenState extends State<InvoiceScreen> {
+
+  HomeWebController homeWebController = Get.put(HomeWebController());
+
   var invoiceList = [];
   var selectedTransporterList = [];
   var displayedInvoiceList = [];
@@ -368,26 +372,17 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                       return GestureDetector(
                         // When user taps, it will redirect to Trip Details
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => HomeScreenWeb(
-                                      visibleWidget: InvoiceTrip(
-                                        bookingIds: (invoice['bookingId']
-                                                    as List<dynamic>?)
-                                                ?.map((id) => id.toString())
-                                                .toList() ??
-                                            [],
-                                        invoiceDate: DateFormat('dd-MM-yyyy')
-                                            .parse(invoice['invoiceDate']),
-                                        dueDate: DateFormat('dd-MM-yyyy')
-                                            .parse(invoice['dueDate']),
-                                      ),
-                                      index: 1000,
-                                      selectedIndex:
-                                          screens.indexOf(invoiceScreen),
-                                    )),
-                          );
+                          homeWebController.changeVisibleWidgetWithSideBarSelectedIndex(InvoiceTrip(
+                            bookingIds: (invoice['bookingId']
+                            as List<dynamic>?)
+                                ?.map((id) => id.toString())
+                                .toList() ??
+                                [],
+                            invoiceDate: DateFormat('dd-MM-yyyy')
+                                .parse(invoice['invoiceDate']),
+                            dueDate: DateFormat('dd-MM-yyyy')
+                                .parse(invoice['dueDate']),
+                          ), screens.indexOf(invoiceScreen));
                         },
                         child: Container(
                           color: white,

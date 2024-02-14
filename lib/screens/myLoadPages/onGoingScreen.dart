@@ -1,11 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-// import 'package:flutter_config/flutter_config.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shipper_app/Web/screens/home_web.dart';
 import 'package:shipper_app/constants/screens.dart';
+import 'package:shipper_app/controller/homeWebController.dart';
 import 'package:shipper_app/responsive.dart';
 import 'package:shipper_app/screens/trackAllScreen.dart';
 import '../../Widgets/LoadsTableHeader.dart';
@@ -27,16 +25,17 @@ class OngoingScreen extends StatefulWidget {
 }
 
 class _OngoingScreenState extends State<OngoingScreen> {
+  HomeWebController homeWebController = Get.put(HomeWebController());
   //Scroll Controller for Pagination
   ScrollController scrollController = ScrollController();
   TextEditingController searchTextController = TextEditingController();
   List<OngoingCardModel> searchedLoadList = [];
   bool loading = true; //false
   DateTime yesterday =
-      DateTime.now().subtract(Duration(days: 1, hours: 5, minutes: 30));
+      DateTime.now().subtract(const Duration(days: 1, hours: 5, minutes: 30));
   late String from;
   late String to;
-  DateTime now = DateTime.now().subtract(Duration(hours: 5, minutes: 30));
+  DateTime now = DateTime.now().subtract(const Duration(hours: 5, minutes: 30));
 
   //for counting page numbers
   int i = 0;
@@ -48,7 +47,7 @@ class _OngoingScreenState extends State<OngoingScreen> {
   List<OngoingCardModel> modelList = [];
 
   getDataByPostLoadIdOnGoing(int i) async {
-    if (this.mounted) {
+    if (mounted) {
       setState(() {
         OngoingProgress = true;
       });
@@ -61,7 +60,7 @@ class _OngoingScreenState extends State<OngoingScreen> {
       }
     }
 
-    if (this.mounted) {
+    if (mounted) {
       // check whether the state object is in tree
       setState(() {
         loading = false;
@@ -111,7 +110,7 @@ class _OngoingScreenState extends State<OngoingScreen> {
         String companyName = modelList[i].companyName ?? 'na';
         String productType = modelList[i].productType ?? 'na';
         String truckType = modelList[i].truckType ?? 'na';
-        String deviceId = modelList[i].deviceId.toString() ?? 'na';
+        String deviceId = modelList[i].deviceId.toString();
 
         if (loadingCity.toLowerCase().contains(searchedText) ||
             unloadingCity.toLowerCase().contains(searchedText) ||
@@ -208,19 +207,10 @@ class _OngoingScreenState extends State<OngoingScreen> {
                     flex: (Responsive.isMobile(context)) ? 2 :4,
                     child: Row(
                       children: [
-                        Expanded(child: SizedBox(),),
+                        const Expanded(child: SizedBox(),),
                         InkWell(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomeScreenWeb(
-                                        visibleWidget: TrackAllScreen(),
-                                        index: 1000,
-                                        selectedIndex:
-                                            screens.indexOf(postLoadScreen),
-                                      )),
-                            );
+                            homeWebController.changeVisibleWidgetWithSideBarSelectedIndex(const TrackAllScreen(), screens.indexOf(postLoadScreen));
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -253,13 +243,13 @@ class _OngoingScreenState extends State<OngoingScreen> {
               height: 20,
             ),
             loading
-                ? Expanded(child: const OnGoingLoadingWidgets())
+                ? const Expanded(child: OnGoingLoadingWidgets())
                 : searchedLoadList.isEmpty
                     ? Container(
-                        margin: EdgeInsets.only(top: 153),
+                        margin: const EdgeInsets.only(top: 153),
                         child: Column(
                           children: [
-                            Image(
+                            const Image(
                               image: AssetImage('assets/images/EmptyLoad.png'),
                               height: 127,
                               width: 127,
@@ -286,9 +276,9 @@ class _OngoingScreenState extends State<OngoingScreen> {
                           child: (kIsWeb && Responsive.isDesktop(context))
                               ? Card(
                                   surfaceTintColor: transparent,
-                                  margin: EdgeInsets.only(bottom: 5),
+                                  margin: const EdgeInsets.only(bottom: 5),
                                   shadowColor: Colors.grey,
-                                  shape: RoundedRectangleBorder(
+                                  shape: const RoundedRectangleBorder(
                                       borderRadius: BorderRadius.zero),
                                   elevation: 10,
                                   child: Column(
@@ -319,7 +309,7 @@ class _OngoingScreenState extends State<OngoingScreen> {
                                               ? Visibility(
                                                   visible: OngoingProgress,
                                                   child:
-                                                      bottomProgressBarIndicatorWidget())
+                                                      const bottomProgressBarIndicatorWidget())
                                               : Row(children: [
                                                   OngoingCard(
                                                     loadAllDataModel:
@@ -339,7 +329,7 @@ class _OngoingScreenState extends State<OngoingScreen> {
                                 )
                               : ListView.builder(
                                   shrinkWrap: true,
-                                  physics: BouncingScrollPhysics(),
+                                  physics: const BouncingScrollPhysics(),
                                   padding: EdgeInsets.only(bottom: space_15),
                                   itemCount: searchedLoadList.length,
                                   itemBuilder: (context, index) {
@@ -347,7 +337,7 @@ class _OngoingScreenState extends State<OngoingScreen> {
                                         ? Visibility(
                                             visible: OngoingProgress,
                                             child:
-                                                bottomProgressBarIndicatorWidget())
+                                                const bottomProgressBarIndicatorWidget())
                                         : (index < searchedLoadList.length)
                                             ? OngoingCard(
                                                 loadAllDataModel:

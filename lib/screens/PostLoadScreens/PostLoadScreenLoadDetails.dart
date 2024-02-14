@@ -2,8 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
-import 'package:screenshot/screenshot.dart';
-import 'package:shipper_app/Web/screens/home_web.dart';
+import 'package:shipper_app/Web/screens/web_dashboard.dart';
 import 'package:shipper_app/Widgets/loadDetailsCommentWidget.dart';
 import 'package:shipper_app/Widgets/loadDetailsWebWidgets/BiddingDateTime.dart';
 import 'package:shipper_app/Widgets/loadDetailsWebWidgets/loadDetailsHeader.dart';
@@ -14,9 +13,7 @@ import 'package:shipper_app/Widgets/loadDetailsWebWidgets/productTypeWebWidget.d
 import 'package:shipper_app/Widgets/loadDetailsWebWidgets/truckTypeWebWidget.dart';
 import 'package:shipper_app/Widgets/loadDetailsWebWidgets/tyresWebWidget.dart';
 import 'package:shipper_app/Widgets/postLoadLocationWidgets/PostLoadMultipleLocationWidget.dart';
-import 'package:shipper_app/constants/fontSize.dart';
-import 'package:shipper_app/constants/fontWeights.dart';
-import 'package:shipper_app/constants/screens.dart';
+import 'package:shipper_app/controller/homeWebController.dart';
 import 'package:shipper_app/responsive.dart';
 import 'package:shipper_app/screens/PostLoadScreens/postloadnavigation.dart';
 import '../../Widgets/loadDetailsWebWidgets/loadPublishMethodWebWidget.dart';
@@ -27,7 +24,6 @@ import '/variables/truckFilterVariablesForPostLoad.dart';
 import '/widgets/PostLoadScreenTwoSearch.dart';
 import '/widgets/PriceTextFieldWidget.dart';
 import '/widgets/UnitValueWidget.dart';
-import '/widgets/addPostLoadHeader.dart';
 import '/widgets/addTruckCircularButtonTemplate.dart';
 import '/widgets/addTruckRectangularButtontemplate.dart';
 import '/widgets/addTruckSubtitleText.dart';
@@ -57,6 +53,8 @@ class _PostLoadScreenTwoState extends State<PostLoadScreenTwo> {
       });
     }
   }
+
+  HomeWebController homeWebController = Get.put(HomeWebController());
 
   @override
   Widget build(BuildContext context) {
@@ -105,25 +103,14 @@ class _PostLoadScreenTwoState extends State<PostLoadScreenTwo> {
                     title: 'Load Details',
                     subTitle: 'Select Load details',
                     previousScreen: (kIsWeb)
-                        ? HomeScreenWeb(
-                            visibleWidget: PostLoadNav(
-                                setChild: postLoadMultipleLocationWidget(
-                                    context,
-                                    HomeScreenWeb(
-                                      selectedIndex: 0,
-                                      index: 0,
-                                    )),
-                                index: 0),
-                            index: 1000,
-                            selectedIndex: screens.indexOf(postLoadScreen),
-                          )
+                        ? PostLoadNav(
+                        setChild: postLoadMultipleLocationWidget(
+                            context,
+                            const WebDashBoard()),
+                        index: 0)
                         : PostLoadNav(
                             setChild: postLoadMultipleLocationWidget(
-                                context,
-                                HomeScreenWeb(
-                                  selectedIndex: 0,
-                                  index: 0,
-                                )),
+                                context, const WebDashBoard()),
                             index: 0)),
                 (Responsive.isMobile(context))
                     ? SingleChildScrollView(

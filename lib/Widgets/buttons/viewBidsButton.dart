@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shipper_app/Web/screens/home_web.dart';
 import 'package:shipper_app/constants/screens.dart';
+import 'package:shipper_app/controller/homeWebController.dart';
 import 'package:shipper_app/responsive.dart';
 import '/constants/colors.dart';
 import '/constants/fontSize.dart';
@@ -23,6 +24,8 @@ class ViewBidsButton extends StatelessWidget {
       required this.unloadingPointCity,
       required this.screenSmall});
 
+  HomeWebController homeWebController = Get.put(HomeWebController());
+
   @override
   Widget build(BuildContext context) {
     if (kIsWeb && Responsive.isDesktop(context)) {
@@ -30,15 +33,15 @@ class ViewBidsButton extends StatelessWidget {
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: Container(
-            margin: EdgeInsets.only(top: 5, bottom: 0, left: 0, right: 0),
-            padding: EdgeInsets.only(top: 5, bottom: 5),
-            decoration: BoxDecoration(
+            margin: const EdgeInsets.only(top: 5, bottom: 0, left: 0, right: 0),
+            padding: const EdgeInsets.only(top: 5, bottom: 5),
+            decoration: const BoxDecoration(
               color: darkBlueColor,
             ),
             child: TextButton(
               style: ButtonStyle(
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
+                    const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.zero),
                 )),
                 backgroundColor:
@@ -58,21 +61,12 @@ class ViewBidsButton extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-                // print(loadId);
                 ((kIsWeb)
-                    ? Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => HomeScreenWeb(
-                                  visibleWidget: BiddingScreens(
-                                    loadId: loadId,
-                                    loadingPointCity: loadingPointCity,
-                                    unloadingPointCity: unloadingPointCity,
-                                  ),
-                                  index: 1000,
-                                  selectedIndex:
-                                      screens.indexOf(postLoadScreen),
-                                )))
+                    ? homeWebController.changeVisibleWidgetWithSideBarSelectedIndex(BiddingScreens(
+                        loadId: loadId,
+                        loadingPointCity: loadingPointCity,
+                        unloadingPointCity: unloadingPointCity,
+                      ), screens.indexOf(postLoadScreen))
                     : Get.to(() => BiddingScreens(
                           loadId: loadId,
                           loadingPointCity: loadingPointCity,

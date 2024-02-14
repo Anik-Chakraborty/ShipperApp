@@ -10,7 +10,7 @@ import 'package:shipper_app/responsive.dart';
 import 'package:shipper_app/screens/PostLoadScreens/PostLoadScreenMultiple.dart';
 
 Widget postLoadMultipleLocationWidget(context, previousScreen) {
-  ProviderData providerData = Provider.of<ProviderData>(context);
+  ProviderData providerData = Provider.of<ProviderData>(context, listen: false);
   return Column(
     mainAxisSize: MainAxisSize.min,
     children: [

@@ -6,14 +6,13 @@ import 'package:shipper_app/constants/colors.dart';
 import 'package:shipper_app/constants/fontSize.dart';
 import 'package:shipper_app/constants/fontWeights.dart';
 import 'package:shipper_app/constants/spaces.dart';
+import 'package:shipper_app/controller/homeWebController.dart';
 import 'package:shipper_app/providerClass/providerData.dart';
 import 'package:shipper_app/responsive.dart';
-
 import 'package:shipper_app/Widgets/loadDetailsWebWidgets/loadDetailsHeader.dart';
 import 'package:shipper_app/constants/screens.dart';
 import 'package:shipper_app/screens/PostLoadScreens/PostLoadScreenLoadDetails.dart';
 import 'package:shipper_app/screens/PostLoadScreens/TruckTypePostLoadDetailsScreen.dart';
-import 'home_web.dart';
 
 class LoadTruckWeightSelectScreenWeb extends StatefulWidget {
   final minWeight, maxWeight;
@@ -38,6 +37,8 @@ class _LoadTruckWeightSelectScreenWebState
   List<List<double>> weightSlots = [
     [0, 0]
   ];
+
+  HomeWebController homeWebController = Get.put(HomeWebController());
 
   var controller = PageController();
   bool check = false;
@@ -105,7 +106,7 @@ class _LoadTruckWeightSelectScreenWebState
   getLoadWeight() {
     return weightSlots.map<Widget>((e) {
       return Container(
-        padding: EdgeInsets.only(top: 10, bottom: 10),
+        padding: const EdgeInsets.only(top: 10, bottom: 10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,7 +121,7 @@ class _LoadTruckWeightSelectScreenWebState
                   color: truckGreen,
                   fontSize: size_9),
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             ListView.separated(
@@ -128,7 +129,7 @@ class _LoadTruckWeightSelectScreenWebState
                 itemBuilder: (context, iterator) {
                   return CheckboxListTile(
                     contentPadding:
-                        EdgeInsets.only(top: 5, bottom: 5, right: 10),
+                        const EdgeInsets.only(top: 5, bottom: 5, right: 10),
                     value: (((e.length > 1 &&
                             (((e[1] - e[0]) + 1).ceil().toInt()) - 1 ==
                                 iterator &&
@@ -173,7 +174,7 @@ class _LoadTruckWeightSelectScreenWebState
                           color: kLiveasyColor,
                           fontSize: size_9),
                     ),
-                    shape: RoundedRectangleBorder(
+                    shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(2))),
                     activeColor: truckGreen,
                     controlAffinity: ListTileControlAffinity.leading,
@@ -185,7 +186,7 @@ class _LoadTruckWeightSelectScreenWebState
                   );
                 },
                 separatorBuilder: (context, index) {
-                  return Divider(
+                  return const Divider(
                     thickness: 1,
                     height: 0,
                   );
@@ -217,7 +218,7 @@ class _LoadTruckWeightSelectScreenWebState
                 RoundedRectangleBorder(
               borderRadius: (Responsive.isMobile(context))
                   ? BorderRadius.circular(50)
-                  : BorderRadius.all(Radius.zero),
+                  : const BorderRadius.all(Radius.zero),
             )),
             backgroundColor: MaterialStateProperty.all<Color>(
                 (selectedWeight.isNotEmpty) ? truckGreen : disableButtonColor),
@@ -232,15 +233,12 @@ class _LoadTruckWeightSelectScreenWebState
               providerData.updateTruckTypeValue(widget.truckTypeValue);
               providerData.resetOnNewType();
               providerFunctionWeight(selectedWeight);
-              ((kIsWeb)
-                  ? Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => HomeScreenWeb(
-                                index: screens.indexOf(postLoadScreenTwo),
-                                selectedIndex: screens.indexOf(postLoadScreen),
-                              )))
-                  : Get.to(() => PostLoadScreenTwo()));
+              if (kIsWeb){
+                homeWebController.changeVisibleWidgetWithSideBarSelectedIndex(const PostLoadScreenTwo(), screens.indexOf(postLoadScreen));
+              }
+              else{
+                Get.to(() => const PostLoadScreenTwo());
+              }
             }
           },
           child: Text(
@@ -267,11 +265,7 @@ class _LoadTruckWeightSelectScreenWebState
               title: 'Choose a Truck Type',
               subTitle: 'What type of truck you require?',
               previousScreen: (kIsWeb)
-                  ? HomeScreenWeb(
-                      visibleWidget: TruckTypePostLoadDetailsScreen(),
-                      index: 1000,
-                      selectedIndex: screens.indexOf(postLoadScreen),
-                    )
+                  ? TruckTypePostLoadDetailsScreen()
                   : null),
           Expanded(
             child: Row(
@@ -295,7 +289,7 @@ class _LoadTruckWeightSelectScreenWebState
                             }
                           },
                           child: Container(
-                            padding: EdgeInsets.only(
+                            padding: const EdgeInsets.only(
                                 top: 20, bottom: 20, left: 10, right: 10),
                             child: Center(
                                 child: Text(
@@ -313,7 +307,7 @@ class _LoadTruckWeightSelectScreenWebState
                         );
                       },
                       separatorBuilder: (BuildContext context, int index) {
-                        return Divider(
+                        return const Divider(
                           thickness: 1,
                           height: 0,
                         );
@@ -326,7 +320,7 @@ class _LoadTruckWeightSelectScreenWebState
                     flex: 3,
                     child: Align(
                       alignment: Alignment.center,
-                      child: Container(
+                      child: SizedBox(
                           width: MediaQuery.of(context).size.width * 0.6,
                           child: SingleChildScrollView(
                             child: Column(

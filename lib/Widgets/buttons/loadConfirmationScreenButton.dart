@@ -3,7 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shipper_app/Widgets/alertDialog/loadingAlertDialog.dart';
+import 'package:shipper_app/Widgets/postLoadLocationWidgets/PostLoadMultipleLocationWidget.dart';
 import 'package:shipper_app/constants/screens.dart';
+import 'package:shipper_app/controller/homeWebController.dart';
 import 'package:shipper_app/responsive.dart';
 import 'package:shipper_app/screens/PostLoadScreens/postLoadScreen.dart';
 import '/constants/colors.dart';
@@ -33,6 +35,8 @@ class LoadConfirmationScreenButton extends StatelessWidget {
 
   LoadConfirmationScreenButton({Key? key, required this.title})
       : super(key: key);
+
+  HomeWebController homeWebController = Get.put(HomeWebController());
 
   @override
   Widget build(BuildContext context) {
@@ -126,20 +130,21 @@ class LoadConfirmationScreenButton extends StatelessWidget {
             );
             Timer(
                 Duration(seconds: 3),
-                () => {
-                      navigationIndexController.updateIndex(0),
-                      Get.offAll(() => kIsWeb
-                          ? HomeScreenWeb(
-                              index: screens.indexOf(postLoadScreen),
-                              selectedIndex: screens.indexOf(postLoadScreen),
-                            )
-                          : NavigationScreen()),
-                      providerData.resetPostLoadFilters(),
-                      providerData.resetPostLoadScreenOne(),
-                      providerData.resetPostLoadScreenMultiple(),
-                      providerData.updateUpperNavigatorIndex2(0),
-                      controller.text = "",
-                      controllerOthers.text = ""
+                () {
+                      navigationIndexController.updateIndex(0);
+                      if (kIsWeb){
+                        Navigator.pop(context);
+                        homeWebController.changeVisibleWidgetWithSideBarSelectedIndex(const PostLoadScreen(), screens.indexOf(postLoadScreen));
+                      }
+                      else{
+                        Get.to(() => const PostLoadScreen());
+                      }
+                      providerData.resetPostLoadFilters();
+                      providerData.resetPostLoadScreenOne();
+                      providerData.resetPostLoadScreenMultiple();
+                      providerData.updateUpperNavigatorIndex2(0);
+                      controller.text = "";
+                      controllerOthers.text = "";
                     });
             providerData.updateEditLoad(true, "");
 
@@ -202,17 +207,22 @@ class LoadConfirmationScreenButton extends StatelessWidget {
               },
             );
             Timer(
-                Duration(seconds: 3),
-                () => {
-                      Get.offAll(
-                          () => kIsWeb ? HomeScreenWeb() : NavigationScreen()),
-                      navigationIndexController.updateIndex(0),
-                      providerData.resetPostLoadFilters(),
-                      providerData.resetPostLoadScreenOne(),
-                      providerData.resetPostLoadScreenMultiple(),
-                      providerData.updateUpperNavigatorIndex2(0),
-                      controller.text = "",
-                      controllerOthers.text = ""
+                const Duration(seconds: 3),
+                () {
+                      if (kIsWeb){
+                        Navigator.pop(context);
+                        homeWebController.changeVisibleWidgetWithSideBarSelectedIndex(const PostLoadScreen(), screens.indexOf(postLoadScreen));
+                      }
+                      else{
+                        Get.to(() => NavigationScreen());
+                      }
+                      navigationIndexController.updateIndex(0);
+                      providerData.resetPostLoadFilters();
+                      providerData.resetPostLoadScreenOne();
+                      providerData.resetPostLoadScreenMultiple();
+                      providerData.updateUpperNavigatorIndex2(0);
+                      controller.text = "";
+                      controllerOthers.text = "";
                     });
             providerData.updateEditLoad(false, "");
           } else {
@@ -231,11 +241,21 @@ class LoadConfirmationScreenButton extends StatelessWidget {
       onTap: () {
         // title=="Edit"?Get.to(PostLoadScreenOne()):
         if (title == "Edit") {
-          providerData.updateUpperNavigatorIndex2(0);
-          Get.to(() => PostLoadNav(
-                setChild: Container(),
-                index: 0,
-              ));
+          providerData.updateTruckTypeValue(providerData.truckTypeValue!
+              .replaceAll(" ", "_")
+              .toUpperCase());
+          if(kIsWeb){
+            homeWebController.changeVisibleWidget(PostLoadNav(
+                setChild:
+                postLoadMultipleLocationWidget(context, (kIsWeb)? const PostLoadScreen(): NavigationScreen()),
+                index: 0));
+          }
+          else{
+            Get.to(() => PostLoadNav(
+              setChild: postLoadMultipleLocationWidget(context,(kIsWeb)? const PostLoadScreen() : NavigationScreen()),
+              index: 0,
+            ));
+          }
         } else {
           providerData.updateUnitValue();
           getData();

@@ -1,30 +1,27 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shipper_app/Web/screens/home_web.dart';
+import 'package:shipper_app/controller/homeWebController.dart';
+import 'package:shipper_app/screens/Invoice_screen.dart';
 import '/constants/colors.dart';
 import '/constants/fontSize.dart';
 import '/constants/fontWeights.dart';
 import '/constants/radius.dart';
 import '/constants/spaces.dart';
 import '/controller/navigationIndexController.dart';
-import '/providerClass/providerData.dart';
 import '/screens/navigationScreen.dart';
-import '/widgets/accountVerification/accountPageUtil.dart';
-import 'package:provider/provider.dart';
 
 class VerifyNowButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    HomeWebController homeWebController = Get.put(HomeWebController());
+
     NavigationIndexController navigationIndexController =
         Get.put(NavigationIndexController());
     return GestureDetector(
       onTap: () {
         if (kIsWeb) {
-          Get.offAll(const HomeScreenWeb(
-            index: 3,
-            selectedIndex: 3,
-          ));
+          homeWebController.changeVisibleWidgetWithSideBarSelectedIndex(const InvoiceScreen(), 3);
         } else {
           Get.offAll(NavigationScreen(initScreen: 2));
           navigationIndexController.updateIndex(2);

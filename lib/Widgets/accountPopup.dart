@@ -3,20 +3,18 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:shipper_app/constants/colors.dart';
 import 'package:shipper_app/constants/fontWeights.dart';
+import 'package:shipper_app/controller/homeWebController.dart';
 import 'package:shipper_app/controller/shipperIdController.dart';
+import 'package:shipper_app/screens/accountScreens/account_details.dart';
 
 import 'alertDialog/LogOutDialogue.dart';
 
 class AccountMenuButton extends StatefulWidget {
   final List<Widget> screens;
-  final Widget accountVerificationStatusScreen;
-  final Function(int) updateIndex;
 
   const AccountMenuButton({
     Key? key,
     required this.screens,
-    required this.accountVerificationStatusScreen,
-    required this.updateIndex,
   }) : super(key: key);
 
   @override
@@ -25,6 +23,7 @@ class AccountMenuButton extends StatefulWidget {
 
 class _AccountMenuButtonState extends State<AccountMenuButton> {
   ShipperIdController shipperIdController = Get.put(ShipperIdController());
+  HomeWebController homeWebController = Get.put(HomeWebController());
   @override
   Widget build(BuildContext context) {
     return TextButton.icon(
@@ -74,8 +73,7 @@ class _AccountMenuButtonState extends State<AccountMenuButton> {
                   ),
                 ),
                 onTap: () {
-                  widget.updateIndex(widget.screens
-                      .indexOf(widget.accountVerificationStatusScreen));
+                  homeWebController.changeVisibleWidget(const AccountScreen());
                   Navigator.of(context).pop();
                 },
               ),

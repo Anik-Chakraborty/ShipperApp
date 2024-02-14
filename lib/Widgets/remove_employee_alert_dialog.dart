@@ -1,17 +1,16 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shipper_app/constants/colors.dart';
+import 'package:shipper_app/controller/homeWebController.dart';
 import 'package:shipper_app/functions/shipperId_fromCompaniesDatabase.dart';
 import 'package:shipper_app/responsive.dart';
 import '../screens/employee_list_with_roles_screen.dart';
-import '../../Web/screens/home_web.dart';
 import '../../constants/screens.dart';
 
 //TODO: This is used to remove the employee/user from the company database.
@@ -27,6 +26,9 @@ class RemoveEmployee extends StatefulWidget {
 }
 
 class _RemoveEmployeeState extends State<RemoveEmployee> {
+
+  HomeWebController homeWebController = Get.put(HomeWebController());
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -96,18 +98,17 @@ class _RemoveEmployeeState extends State<RemoveEmployee> {
                     if (response.statusCode != 200) {
                       debugPrint('Something wrong');
                     }
-
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => kIsWeb
-                              ? HomeScreenWeb(
-                                  index: screens.indexOf(employeeListScreen),
-                                  selectedIndex: screens
-                                      .indexOf(accountVerificationStatusScreen),
-                                )
-                              : const EmployeeListRolesScreen(),
-                        ));
+                    if(kIsWeb){
+                      homeWebController.changeVisibleWidgetWithSideBarSelectedIndex(const EmployeeListRolesScreen(), screens
+                          .indexOf(accountVerificationStatusScreen));
+                    }
+                    else{
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const EmployeeListRolesScreen(),
+                          ));
+                    }
                   });
                 } else {
                   debugPrint('No such document!');

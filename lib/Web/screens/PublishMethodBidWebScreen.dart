@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -14,6 +13,7 @@ import 'package:shipper_app/constants/fontSize.dart';
 import 'package:shipper_app/constants/fontWeights.dart';
 import 'package:shipper_app/constants/screens.dart';
 import 'package:shipper_app/controller/addLocationDrawerToggleController.dart';
+import 'package:shipper_app/controller/homeWebController.dart';
 import 'package:shipper_app/functions/shipperApis/TransporterListFromShipperApi.dart';
 import 'package:shipper_app/providerClass/providerData.dart';
 import 'package:shipper_app/responsive.dart';
@@ -38,6 +38,8 @@ class _PublishMethodBidWebScreenState extends State<PublishMethodBidWebScreen> {
   bool enableFinishButton = false;
   AddLocationDrawerToggleController addLocationDrawerToggleController =
       Get.put(AddLocationDrawerToggleController());
+
+  HomeWebController homeWebController = Get.put(HomeWebController());
 
   @override
   void initState() {
@@ -110,13 +112,13 @@ class _PublishMethodBidWebScreenState extends State<PublishMethodBidWebScreen> {
 
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              padding: EdgeInsets.only(bottom: 20),
+              padding: const EdgeInsets.only(bottom: 20),
               child: Row(
                 children: [
                   Expanded(child: Container()),
@@ -125,7 +127,7 @@ class _PublishMethodBidWebScreenState extends State<PublishMethodBidWebScreen> {
                         addLocationDrawerToggleController.toggleAddTransporter(false);
                         Navigator.pop(context);
                       },
-                      icon: FaIcon(
+                      icon: const FaIcon(
                         FontAwesomeIcons.xmark,
                         color: black,
                         size: 25,
@@ -149,7 +151,7 @@ class _PublishMethodBidWebScreenState extends State<PublishMethodBidWebScreen> {
             Row(
               children: [
                 PublishBidSearchTextFieldWidget(),
-                SizedBox(
+                const SizedBox(
                   width: 40,
                 ),
                 Expanded(
@@ -173,15 +175,15 @@ class _PublishMethodBidWebScreenState extends State<PublishMethodBidWebScreen> {
                     ),
                     style: ButtonStyle(
                       backgroundColor: MaterialStatePropertyAll(truckGreen),
-                      mouseCursor: MaterialStatePropertyAll<MouseCursor>(
+                      mouseCursor: const MaterialStatePropertyAll<MouseCursor>(
                           SystemMouseCursors.click),
-                      padding: MaterialStatePropertyAll<EdgeInsets>(
+                      padding: const MaterialStatePropertyAll<EdgeInsets>(
                           EdgeInsets.only(
                               left: 20, right: 20, top: 10, bottom: 10)),
                       shape: MaterialStatePropertyAll<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
+                                  const BorderRadius.all(Radius.circular(10)),
                               side: BorderSide(
                                 color: truckGreen,
                                 width: 2,
@@ -224,18 +226,18 @@ class _PublishMethodBidWebScreenState extends State<PublishMethodBidWebScreen> {
                                     fontFamily: 'Montserrat',
                                     fontSize: size_10),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 15,
                               ),
                               Expanded(
                                 child: Container(
-                                  padding: EdgeInsets.all(15),
+                                  padding: const EdgeInsets.all(15),
                                   decoration: BoxDecoration(
                                       borderRadius:
-                                          BorderRadius.all(Radius.circular(10)),
+                                          const BorderRadius.all(Radius.circular(10)),
                                       border: Border.all(
                                           color: borderLightColor, width: 1)),
-                                  child: (transporterList.length == 0)
+                                  child: (transporterList.isEmpty)
                                       ? Center(
                                           child: Text(
                                             'No Transporter Found!!',
@@ -295,7 +297,7 @@ class _PublishMethodBidWebScreenState extends State<PublishMethodBidWebScreen> {
                                                     mouseCursor:
                                                         SystemMouseCursors
                                                             .click,
-                                                    shape: RoundedRectangleBorder(
+                                                    shape: const RoundedRectangleBorder(
                                                         borderRadius:
                                                             BorderRadius.all(
                                                                 Radius.circular(
@@ -348,15 +350,8 @@ class _PublishMethodBidWebScreenState extends State<PublishMethodBidWebScreen> {
                           .updateLoadTransporterList(selectedTransporterList);
                       providerData.updatePublishMethod(widget.publishMethod);
                       ((kIsWeb)
-                          ? Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => HomeScreenWeb(
-                                index: screens.indexOf(postLoadScreenTwo),
-                                selectedIndex:
-                                screens.indexOf(postLoadScreen),
-                              )))
-                          : Get.to(() => PostLoadScreenTwo()));
+                          ? Navigator.pop(context)
+                          : Get.to(() => const PostLoadScreenTwo()));
                     }
                   },
                   child: Text(
