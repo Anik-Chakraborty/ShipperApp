@@ -153,13 +153,12 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
             SizedBox(
               width: 48,
               height: 40,
-              child: TextButton.icon(
+              child: IconButton(
                 onPressed: () {},
                 icon: const Icon(
                   Icons.search_outlined,
                   color: white,
                 ),
-                label: const Text(''),
               ),
             ),
             Padding(
