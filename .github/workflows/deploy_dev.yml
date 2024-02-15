@@ -11,55 +11,55 @@ jobs:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
       - name: Create .env file
-        run: |
-          echo "shipperApiUrl=${{ vars.SHIPPER_API_URL }}" > .env
-          echo "loadApiUrl=${{ vars.LOAD_API_URL }}" >> .env
-          echo "transporterApiUrl=${{ vars.TRANSPORTER_API_URL }}" >> .env
-          echo "documentApiUrl=${{ vars.DOCUMENT_API_URL }}" >> .env
-          echo "driverApiUrl=${{ vars.DRIVER_API_URL }}" >> .env
-          echo "biddingApiUrl=${{ vars.BIDDING_API_URL }}" >> .env
-          echo "bookingApiUrl=${{ vars.BOOKING_API_URL }}" >> .env
-          echo "truckApiUrl=${{ vars.TRUCK_API_URL }}" >> .env
-          echo "gpsApiUrl=${{ vars.GPS_API_URL }}" >> .env
-          echo "buyGPSApiUrl=${{ vars.BUY_GPS_API_URL }}" >> .env
-          echo "mapKeyOld=${{ vars.MAP_KEY_OLD }}" >> .env
-          echo "mapKeyNew=${{ vars.MAP_KEY_NEW }}" >> .env
-          echo "mapKey=${{ vars.MAP_KEY }}" >> .env
-          echo "rapidKey=${{ vars.RAPID_KEY }}" >> .env
-          echo "shareUrl=${{ vars.SHARE_URL }}" >> .env
-          echo "routeHistoryApiUrl=${{ vars.ROUTE_HISTORY_API_URL }}" >> .env
-          echo "traccarApi=${{ vars.TRACCAR_API }}" >> .env
-          echo "traccarUser=${{ vars.TRACCAR_USER }}" >> .env
-          echo "traccarPass=${{ vars.TRACCAR_PASS }}" >> .env
-          echo "routeDataApiUrl=${{ vars.ROUTE_DATA_API_URL}}" >> .env
-          echo "idfyAccountId=${{ vars.IDFY_ACCOUNT_ID}}" >> .env
-          echo "idfyApiKey=${{ vars.IDFY_API_KEY }}" >> .env
-          echo "idfyKey_id=${{ vars.IDFY_KEY_ID }}" >> .env
-          echo "idfyOu_id=${{ vars.IDFY_OU_ID }}" >> .env
-          echo "idfySecret_Key=${{ vars.IDFY_SECRET_KEY }}" >> .env
-          echo "webHookUrl=${{ vars.WEB_HOOK_URL }}" >> .env
-          echo "uidByPhoneNumber=${{ vars.UID_BY_PHONE_NUMBER }}" >> .env
-          echo "installerApi=${{ vars.INSTALLER_API }}" >> .env
-          echo "placeAutoCompleteProxy=${{ vars.PLACE_AUTO_COMPLETE_PROXY }}" >> .env
-          echo "getUidByPhoneNumber=${{ vars.GET_UID_BY_PHONE_NUMBER }}" >> .env
-          echo "getUidByMail=${{ vars.GET_UID_BY_MAIL }}" >> .env
-          echo "getUid=${{ vars.GET_UID }}" >> .env
-          echo "oneSignalApiKey=${{ vars.ONE_SIGNAL_API_KEY }}" >> .env
-          echo "oneSignalAppId=${{ vars.ONE_SIGNAL_APP_ID }}" >> .env
-          echo "fastTag=${{ vars.FAST_TAG }}" >> .env
-          echo "vahanUrl=${{ vars.VAHAN_URL }}" >> .env
-          echo "invoiceApiUrl=${{ vars.INVOICE_API_URL }}" >> .env
-          echo "consentApiUrl=${{ vars.CONSENT_API_URL }}" >> .env
-          echo "consentStatusUrl=${{ vars.CONSENT_STATUS_URL }}" >> .env
-          echo "numVerifyApiUrl=${{ vars.NUM_VERIFY_API_URL }}" >> .env
-          echo "accessKey=${{ vars.ACCESS_KEY }}" >> .env
-          echo "ewayBill=${{ vars.EWAY_BILL }}" >> .env
-          echo "ewayBillUser=${{ vars.EWAY_BILL_USER }}" >> .env
-          echo "sendInviteEmailUrl=${{ vars.SEND_INVITE_EMAIL_URL }}" >> .env
-          echo "encryptKey=${{ vars.ENCRYPT_KEY }}" >> .env
-          echo "inviteEmails=${{ vars.INVITE_EMAILS }}" >> .env
-          echo "deleteInvite=${{ vars.DELETE_INVITE }}" >> .env
-          echo "inviteBaseUrl=${{ vars.INVITE_BASE_URL }}" >> .env
+        env:
+          shipperApiUrl: ${{ vars.SHIPPER_API_URL }}
+          loadApiUrl: ${{ vars.LOAD_API_URL }}
+          transporterApiUrl: ${{ vars.TRANSPORTER_API_URL }}
+          documentApiUrl: ${{ vars.DOCUMENT_API_URL }}
+          driverApiUrl: ${{ vars.DRIVER_API_URL }}
+          biddingApiUrl: ${{ vars.BIDDING_API_URL }}
+          bookingApiUrl: ${{ vars.BOOKING_API_URL }}
+          truckApiUrl: ${{ vars.TRUCK_API_URL }}
+          gpsApiUrl: ${{ vars.GPS_API_URL }}
+          buyGPSApiUrl: ${{ vars.BUY_GPS_API_URL }}
+          mapKeyOld: ${{ vars.MAP_KEY_OLD }}"
+          mapKeyNew: ${{ vars.MAP_KEY_NEW }}"
+          mapKey: ${{ vars.MAP_KEY }}"
+          rapidKey: ${{ vars.RAPID_KEY }}
+          shareUrl: ${{ vars.SHARE_URL }}"
+          routeHistoryApiUrl: ${{ vars.ROUTE_HISTORY_API_URL }}"
+          traccarApi: ${{ vars.TRACCAR_API }}"
+          traccarUser: ${{ vars.TRACCAR_USER }}"
+          traccarPass: ${{ vars.TRACCAR_PASS }}"
+          routeDataApiUrl: ${{ vars.ROUTE_DATA_API_URL}}"
+          idfyAccountId: ${{ vars.IDFY_ACCOUNT_ID}}"
+          idfyApiKey: ${{ vars.IDFY_API_KEY }}"
+          idfyKey_id: ${{ vars.IDFY_KEY_ID }}"
+          idfyOu_id: ${{ vars.IDFY_OU_ID }}"
+          idfySecret_Key: ${{ vars.IDFY_SECRET_KEY }}"
+          webHookUrl: ${{ vars.WEB_HOOK_URL }}"
+          uidByPhoneNumber: ${{ vars.UID_BY_PHONE_NUMBER }}"
+          installerApi: ${{ vars.INSTALLER_API }}"
+          placeAutoCompleteProxy: ${{ vars.PLACE_AUTO_COMPLETE_PROXY }}"
+          getUidByPhoneNumber: ${{ vars.GET_UID_BY_PHONE_NUMBER }}"
+          getUidByMail: ${{ vars.GET_UID_BY_MAIL }}"
+          getUid: ${{ vars.GET_UID }}"
+          oneSignalApiKey: ${{ vars.ONE_SIGNAL_API_KEY }}"
+          oneSignalAppId: ${{ vars.ONE_SIGNAL_APP_ID }}"
+          fastTag: ${{ vars.FAST_TAG }}"
+          vahanUrl: ${{ vars.VAHAN_URL }}"
+          invoiceApiUrl: ${{ vars.INVOICE_API_URL }}"
+          consentApiUrl: ${{ vars.CONSENT_API_URL }}"
+          consentStatusUrl: ${{ vars.CONSENT_STATUS_URL }}"
+          numVerifyApiUrl: ${{ vars.NUM_VERIFY_API_URL }}"
+          accessKey: ${{ vars.ACCESS_KEY }}"
+          ewayBill: ${{ vars.EWAY_BILL }}"
+          ewayBillUser: ${{ vars.EWAY_BILL_USER }}"
+          sendInviteEmailUrl: ${{ vars.SEND_INVITE_EMAIL_URL }}"
+          encryptKey: ${{ vars.ENCRYPT_KEY }}"
+          inviteEmails: ${{ vars.INVITE_EMAILS }}"
+          deleteInvite: ${{ vars.DELETE_INVITE }}"
+          inviteBaseUrl: ${{ vars.INVITE_BASE_URL }}"
 
       - name: Merge to branch
         run: |
